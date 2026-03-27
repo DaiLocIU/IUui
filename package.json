@@ -1,0 +1,57 @@
+{
+  "name": "vue-facebook-ui",
+  "version": "1.0.0",
+  "description": "A Facebook-style Vue 3 component library built with TypeScript and Vite",
+  "type": "module",
+  "main": "./dist/vue-facebook-ui.umd.js",
+  "module": "./dist/vue-facebook-ui.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/vue-facebook-ui.js",
+      "require": "./dist/vue-facebook-ui.umd.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^5.1.0",
+    "@storybook/addon-a11y": "^10.3.3",
+    "@storybook/addon-docs": "^10.3.3",
+    "@storybook/addon-onboarding": "^10.3.3",
+    "@storybook/addon-vitest": "^10.3.3",
+    "@storybook/vue3-vite": "^10.3.3",
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/node": "^25.5.0",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vitest/browser-playwright": "^4.1.1",
+    "@vitest/coverage-v8": "^4.1.1",
+    "autoprefixer": "^10.4.27",
+    "playwright": "^1.58.2",
+    "postcss": "^8.5.8",
+    "storybook": "^10.3.3",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^5.4.2",
+    "vite": "^5.2.0",
+    "vite-plugin-dts": "^3.8.0",
+    "vitest": "^4.1.1",
+    "vue": "^3.5.31",
+    "vue-tsc": "^2.0.7"
+  },
+  "dependencies": {
+    "@vueuse/core": "^14.2.1"
+  }
+}
