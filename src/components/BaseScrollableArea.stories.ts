@@ -69,7 +69,7 @@ export const DefaultVertical: Story = {
     components: { BaseScrollableArea },
     template: `
       <div style="height: 300px; width: 320px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; background: white;">
-        <BaseScrollableArea :vertical="true" style="height: 100%;">
+        <BaseScrollableArea :vertical="true" style="height: 100%;" testid="default">
           <div style="padding: 12px; display: flex; flex-direction: column;">
             ${generateBlocks(10)}
           </div>

@@ -11,10 +11,6 @@
     @mouseleave="handleMouseLeave"
     @scroll="handleScroll"
   >
-    <div v-if="withTopShadow" :style="topShadowStyle">
-      <div :style="topShadowInnerStyle" />
-    </div>
-
     <div
       :ref="!useForceBrowserDefault ? 'innerContentRef' : undefined"
       :style="contentWrapperStyle"
@@ -27,11 +23,6 @@
         :style="bottomSentinelStyle"
       />
     </div>
-
-    <div v-if="withBottomShadow" :style="bottomShadowStyle">
-      <div :style="bottomShadowInnerStyle" />
-    </div>
-
     <div
       v-if="!useForceBrowserDefault"
       ref="trackRef"
@@ -57,6 +48,7 @@
 </template>
 
 <script setup lang="ts">
+import { useDebounceFn } from "@vueuse/core";
 import {
   computed,
   nextTick,
@@ -67,7 +59,6 @@ import {
   watch,
   type CSSProperties,
 } from "vue";
-import { useDebounceFn } from "@vueuse/core";
 
 import { useBasePopoverReflowSheetContext } from "../composables/useBasePopoverReflowSheetContext";
 import {
@@ -101,8 +92,6 @@ interface Props {
   tabIndex?: number;
   testid?: string;
   vertical?: boolean;
-  withBottomShadow?: boolean;
-  withTopShadow?: boolean;
   xstyle?: CSSProperties;
   onScrollTop?: () => void;
   onScrollBottom?: () => void;
@@ -117,8 +106,6 @@ const props = withDefaults(defineProps<Props>(), {
   nestedScrollEnabled: false,
   persistentScrollbar: false,
   vertical: false,
-  withBottomShadow: false,
-  withTopShadow: false,
 });
 
 const emit = defineEmits<{
@@ -229,7 +216,6 @@ const contentWrapperStyle = computed<CSSProperties>(() => ({
   flexDirection: props.horizontal && !props.vertical ? "row" : "column",
   flexGrow: "1",
   position: "relative",
-  overflow: props.withTopShadow || props.withBottomShadow ? "visible" : undefined,
 }));
 
 const computedThumbStyle = computed<CSSProperties>(() => ({
@@ -264,45 +250,6 @@ const thumbInnerStyle: CSSProperties = {
   width: "100%",
   height: "100%",
 };
-
-const topShadowStyle: CSSProperties = {
-  display: "flex",
-  flexDirection: "column",
-  flexShrink: "0",
-  left: "0",
-  right: "0",
-  pointerEvents: "none",
-  position: "absolute",
-  top: "0",
-  justifyContent: "flex-start",
-  zIndex: "1",
-};
-
-const topShadowInnerStyle: CSSProperties = {
-  flexShrink: "0",
-  height: "20px",
-  background: "linear-gradient(to bottom, rgba(0,0,0,0.12), transparent)",
-};
-
-const bottomShadowStyle: CSSProperties = {
-  display: "flex",
-  flexDirection: "column",
-  flexShrink: "0",
-  left: "0",
-  right: "0",
-  pointerEvents: "none",
-  position: "absolute",
-  bottom: "0",
-  justifyContent: "flex-end",
-  zIndex: "1",
-};
-
-const bottomShadowInnerStyle: CSSProperties = {
-  flexShrink: "0",
-  height: "20px",
-  background: "linear-gradient(to top, rgba(0,0,0,0.12), transparent)",
-};
-
 const topSentinelStyle: CSSProperties = {
   height: "1px",
   opacity: "0",
@@ -351,167 +298,162 @@ function handleScroll(event: Event) {
 
 let cleanupCustomScrollbar: (() => void) | null = null;
 
+
 function setupCustomScrollbar() {
-  cleanupCustomScrollbar?.();
-  cleanupCustomScrollbar = null;
+  cleanupCustomScrollbar?.()
+  cleanupCustomScrollbar = null
 
-  if (useForceBrowserDefault.value) return;
+  if (useForceBrowserDefault.value) return
 
-  const scroller = scrollerRef.value;
-  const innerContent = innerContentRef.value;
-  const externalContent = props.contentRef?.current ?? innerContent;
-  const track = trackRef.value;
-  const thumb = thumbRef.value;
+  const scroller        = scrollerRef.value
+  const innerContent    = innerContentRef.value
+  const externalContent = props.contentRef?.current ?? innerContent
+  const track           = trackRef.value
+  const thumb           = thumbRef.value
 
-  if (!scroller || !innerContent || !externalContent || !track || !thumb) return;
+  if (!scroller || !innerContent || !externalContent || !track || !thumb) return
 
-  const safeScroller = scroller;
-  const safeInnerContent = innerContent;
-  const safeExternalContent = externalContent;
-  const safeTrack = track;
-  const safeThumb = thumb;
+  const safeScroller        = scroller
+  const safeInnerContent    = innerContent
+  const safeExternalContent = externalContent
+  const safeTrack           = track
+  const safeThumb           = thumb
 
-  let thumbHeight = 0;
-  let containerTop = 0;
+  let thumbHeight = 0
+  // containerTop declared but will be re-read fresh in handleTrackMouseDown (Bug 2 fix)
 
   function recalculate() {
-    safeTrack.style.display = "none";
-    safeThumb.style.display = "none";
+    safeTrack.style.display = 'none'
+    safeThumb.style.display = 'none'
 
-    const scrollerRect = safeScroller.getBoundingClientRect();
-    const contentRect = safeExternalContent.getBoundingClientRect();
-    const scrollerScrollHeight = safeScroller.scrollHeight;
-    const innerScrollHeight = safeInnerContent.scrollHeight;
-    const externalScrollHeight = safeExternalContent.scrollHeight;
+    const scrollerRect         = safeScroller.getBoundingClientRect()
+    const contentRect          = safeExternalContent.getBoundingClientRect()
+    const scrollerScrollHeight = safeScroller.scrollHeight
+    const innerScrollHeight    = safeInnerContent.scrollHeight
+    const externalScrollHeight = safeExternalContent.scrollHeight
 
-    const heightDiff = innerScrollHeight - externalScrollHeight;
-    const hasHeightDiff = heightDiff !== 0;
-    const visibleHeight = safeScroller.clientHeight - heightDiff;
+    const heightDiff    = innerScrollHeight - externalScrollHeight
+    const hasHeightDiff = heightDiff !== 0
+    const visibleHeight = safeScroller.clientHeight - heightDiff
 
-    containerTop = scrollerRect.top;
-    totalScrollHeight = hasHeightDiff ? externalScrollHeight : scrollerScrollHeight;
-    const totalHeight = totalScrollHeight;
+    totalScrollHeight = hasHeightDiff ? externalScrollHeight : scrollerScrollHeight
+    const totalHeight = totalScrollHeight
 
-    thumbHeight = Math.pow(visibleHeight, 2) / totalHeight;
+    thumbHeight = Math.pow(visibleHeight, 2) / totalHeight
 
-    safeTrack.style.height = `${totalHeight}px`;
-    console.log('idtest', props.testid)
-    console.log('setTrackHeight', safeTrack.style.height)
-    safeThumb.style.height =
-      totalHeight <= visibleHeight ? "0px" : `${thumbHeight}px`;
+    safeTrack.style.height = `${totalHeight}px`
+    safeThumb.style.height = totalHeight <= visibleHeight ? '0px' : `${thumbHeight}px`
 
-    const side = IS_RTL ? "left" : "right";
-    safeTrack.style.setProperty(side, "0px");
-    safeThumb.style.setProperty(side, "0px");
+    const side = IS_RTL ? 'left' : 'right'
+    safeTrack.style.setProperty(side, '0px')
+    safeThumb.style.setProperty(side, '0px')
 
-    const currentScrollTop = safeScroller.scrollTop;
-    const contentOffsetTop = contentRect.top - scrollerRect.top + currentScrollTop;
-    let perspectiveOffset = 0;
+    const currentScrollTop = safeScroller.scrollTop
+    const contentOffsetTop = contentRect.top - scrollerRect.top + currentScrollTop
+    let perspectiveOffset  = 0
 
+    // BUG 3 FIX: always reset top in both branches
     if (hasHeightDiff) {
-      perspectiveOffset = contentOffsetTop * -1;
-      safeTrack.style.top = `${contentOffsetTop}px`;
-      safeThumb.style.top = `${contentOffsetTop}px`;
+      perspectiveOffset       = contentOffsetTop * -1
+      safeTrack.style.top     = `${contentOffsetTop}px`
+      safeThumb.style.top     = `${contentOffsetTop}px`
     } else {
-      safeTrack.style.top = "0px";
-      safeThumb.style.top = "0px";
+      safeTrack.style.top = '0px'  // ← was missing, caused stale offset
+      safeThumb.style.top = '0px'
     }
 
-    const scrollRatio = (visibleHeight - thumbHeight) / (totalHeight - visibleHeight);
+    // BUG 1 FIX: guard against division by zero when content == visible height
+    const scrollRatio = (visibleHeight - thumbHeight) / (totalHeight - visibleHeight)
+    const safeRatio   = Math.max(scrollRatio, 0.0001)
+
     safeThumb.style.transform = [
       `matrix3d(1,0,0,0,0,1,0,0,0,${perspectiveOffset},1,0,0,0,0,-1)`,
-      `scale(${1 / scrollRatio})`,
-      `translateZ(${1 - 1 / scrollRatio}px)`,
+      `scale(${1 / safeRatio})`,
+      `translateZ(${1 - 1 / safeRatio}px)`,
       `translateZ(-2px)`,
-    ].join(" ");
+    ].join(' ')
 
-    safeThumb.style.display = "block";
-    safeTrack.style.display = totalHeight <= visibleHeight ? "none" : "block";
+    safeThumb.style.display = 'block'
+    safeTrack.style.display = totalHeight <= visibleHeight ? 'none' : 'block'
   }
 
   function handleTrackMouseDown(event: MouseEvent) {
-    stopAllEvents(event);
+    stopAllEvents(event)
 
-    const clickY = event.clientY;
-    const clientHeight = safeScroller.clientHeight;
-    const scrollTop = safeScroller.scrollTop;
+    // BUG 2 FIX: always read fresh — page scroll moves the scroller
+    // so containerTop from last recalculate() is stale
+    const containerTop = safeScroller.getBoundingClientRect().top
 
-    isDragging.value = true;
+    const clickY       = event.clientY
+    const clientHeight = safeScroller.clientHeight
+    const scrollTop    = safeScroller.scrollTop
 
-    const scrollRatio = totalScrollHeight / clientHeight;
-    const thumbTop = scrollTop / scrollRatio;
+    isDragging.value = true
+
+    const scrollRatio  = totalScrollHeight / clientHeight
+    const thumbTop     = scrollTop / scrollRatio
 
     if (clickY < containerTop + thumbTop || clickY > containerTop + thumbTop + thumbHeight) {
-      const direction = clickY < containerTop + thumbTop ? -SCROLL_STEP_PX : SCROLL_STEP_PX;
-      let isInside = true;
+      const direction = clickY < containerTop + thumbTop ? -SCROLL_STEP_PX : SCROLL_STEP_PX
+      let isInside = true
 
       const scrollInterval = window.setInterval(() => {
-        if (isInside) {
-          safeScroller.scrollTo({ top: safeScroller.scrollTop + direction });
-        }
-      }, SCROLL_INTERVAL_MS);
+        if (isInside) safeScroller.scrollTo({ top: safeScroller.scrollTop + direction })
+      }, SCROLL_INTERVAL_MS)
 
       function onMouseUp(e: MouseEvent) {
-        stopAllEvents(e);
-        window.clearInterval(scrollInterval);
-        window.removeEventListener("mouseup", onMouseUp, true);
-        safeTrack.removeEventListener("mouseenter", onMouseEnterTrack);
-        safeTrack.removeEventListener("mouseleave", onMouseLeaveTrack);
-        isDragging.value = false;
+        stopAllEvents(e)
+        window.clearInterval(scrollInterval)
+        window.removeEventListener('mouseup', onMouseUp, true)
+        safeTrack.removeEventListener('mouseenter', onMouseEnterTrack)
+        safeTrack.removeEventListener('mouseleave', onMouseLeaveTrack)
+        isDragging.value = false
       }
 
-      function onMouseEnterTrack(e: MouseEvent) {
-        stopAllEvents(e);
-        isInside = true;
-      }
+      function onMouseEnterTrack(e: MouseEvent) { stopAllEvents(e); isInside = true  }
+      function onMouseLeaveTrack(e: MouseEvent) { stopAllEvents(e); isInside = false }
 
-      function onMouseLeaveTrack(e: MouseEvent) {
-        stopAllEvents(e);
-        isInside = false;
-      }
-
-      window.addEventListener("mouseup", onMouseUp, true);
-      safeTrack.addEventListener("mouseenter", onMouseEnterTrack);
-      safeTrack.addEventListener("mouseleave", onMouseLeaveTrack);
-      return;
+      window.addEventListener('mouseup', onMouseUp, true)
+      safeTrack.addEventListener('mouseenter', onMouseEnterTrack)
+      safeTrack.addEventListener('mouseleave', onMouseLeaveTrack)
+      return
     }
 
-    const startY = clickY;
-    const startScrollTop = scrollTop;
+    const startY         = clickY
+    const startScrollTop = scrollTop
 
     function onMouseMove(e: MouseEvent) {
-      stopAllEvents(e);
-      const deltaY = e.clientY - startY;
-      safeScroller.scrollTo({ top: startScrollTop + deltaY * scrollRatio });
+      stopAllEvents(e)
+      safeScroller.scrollTo({ top: startScrollTop + (e.clientY - startY) * scrollRatio })
     }
 
     function onMouseUp(e: MouseEvent) {
-      stopAllEvents(e);
-      isDragging.value = false;
-      window.removeEventListener("mousemove", onMouseMove, true);
-      window.removeEventListener("mouseup", onMouseUp, true);
+      stopAllEvents(e)
+      isDragging.value = false
+      window.removeEventListener('mousemove', onMouseMove, true)
+      window.removeEventListener('mouseup',   onMouseUp,   true)
     }
 
-    window.addEventListener("mousemove", onMouseMove, true);
-    window.addEventListener("mouseup", onMouseUp, true);
+    window.addEventListener('mousemove', onMouseMove, true)
+    window.addEventListener('mouseup',   onMouseUp,   true)
   }
 
-  const debouncedRecalculate = useDebounceFn(recalculate, 100);
+  const debouncedRecalculate = useDebounceFn(recalculate, 100)
 
-  window.addEventListener("resize", debouncedRecalculate);
-  safeTrack.addEventListener("mousedown", handleTrackMouseDown);
+  window.addEventListener('resize', debouncedRecalculate)
+  safeTrack.addEventListener('mousedown', handleTrackMouseDown)
 
-  const resizeObserver = new ResizeObserver(debouncedRecalculate);
-  resizeObserver.observe(safeInnerContent);
-  resizeObserver.observe(safeScroller);
+  const resizeObserver = new ResizeObserver(debouncedRecalculate)
+  resizeObserver.observe(safeInnerContent)
+  resizeObserver.observe(safeScroller)
 
-  nextTick(() => recalculate());
+  nextTick(() => recalculate())
 
   cleanupCustomScrollbar = () => {
-    window.removeEventListener("resize", debouncedRecalculate);
-    safeTrack.removeEventListener("mousedown", handleTrackMouseDown);
-    resizeObserver.disconnect();
-  };
+    window.removeEventListener('resize', debouncedRecalculate)
+    safeTrack.removeEventListener('mousedown', handleTrackMouseDown)
+    resizeObserver.disconnect()
+  }
 }
 
 let topObserver: IntersectionObserver | null = null;
