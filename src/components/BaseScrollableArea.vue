@@ -11,6 +11,10 @@
     @mouseleave="handleMouseLeave"
     @scroll="handleScroll"
   >
+    <div v-if="props.withTopShadow" :style="topShadowStyle">
+      <div :style="topShadowInnerStyle" />
+    </div>
+
     <div
       :ref="!useForceBrowserDefault ? 'innerContentRef' : undefined"
       :style="contentWrapperStyle"
@@ -23,6 +27,11 @@
         :style="bottomSentinelStyle"
       />
     </div>
+
+    <div v-if="props.withBottomShadow" :style="bottomShadowStyle">
+      <div :style="bottomShadowInnerStyle" />
+    </div>
+
     <div
       v-if="!useForceBrowserDefault"
       ref="trackRef"
@@ -92,6 +101,8 @@ interface Props {
   tabIndex?: number;
   testid?: string;
   vertical?: boolean;
+  withBottomShadow?: boolean;
+  withTopShadow?: boolean;
   xstyle?: CSSProperties;
   onScrollTop?: () => void;
   onScrollBottom?: () => void;
@@ -106,6 +117,8 @@ const props = withDefaults(defineProps<Props>(), {
   nestedScrollEnabled: false,
   persistentScrollbar: false,
   vertical: false,
+  withBottomShadow: false,
+  withTopShadow: false,
 });
 
 const emit = defineEmits<{
@@ -266,6 +279,48 @@ const bottomSentinelStyle: CSSProperties = {
   position: "absolute",
   width: "100%",
   bottom: "0",
+};
+
+const topShadowStyle: CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  flexShrink: "0",
+  left: "0",
+  right: "0",
+  pointerEvents: "none",
+  position: "absolute",
+  top: "0",
+  justifyContent: "flex-start",
+  zIndex: "1",
+};
+
+const bottomShadowStyle: CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  flexShrink: "0",
+  left: "0",
+  right: "0",
+  pointerEvents: "none",
+  position: "absolute",
+  bottom: "0",
+  justifyContent: "flex-end",
+  zIndex: "1",
+};
+
+const topShadowInnerStyle: CSSProperties = {
+  flexShrink: "0",
+  height: "16px",
+  width: "100%",
+  background:
+    "linear-gradient(to bottom, rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0))",
+};
+
+const bottomShadowInnerStyle: CSSProperties = {
+  flexShrink: "0",
+  height: "16px",
+  width: "100%",
+  background:
+    "linear-gradient(to top, rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0))",
 };
 
 function stopAllEvents(event: MouseEvent) {
