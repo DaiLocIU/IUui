@@ -9,13 +9,15 @@ import SidebarRail from './components/SidebarRail.vue'
 import SidebarRailSection from './components/SidebarRailSection.vue'
 import SidebarRailItem from './components/SidebarRailItem.vue'
 import SidebarRailFooter from './components/SidebarRailFooter.vue'
+import TruncationTooltip from './components/TruncationTooltip.vue'
 export type { SidebarRailItemData, SidebarRailSectionData, SidebarRailFooterItemData } from './system/sidebarRail'
+export type { TruncationTooltipConfig } from './components/TruncationTooltip.vue'
 
 // Advanced — use for error boundaries and Suspense wrappers
 import IURowItem from './components/IURowItem.vue'
 import IUColumnItem from './components/IUColumnItem.vue'
 
-export { IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter }
+export { IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip }
 
 export default {
   install: (app: any) => {
@@ -28,5 +30,6 @@ export default {
     app.component('IUSidebarRailSection', SidebarRailSection)
     app.component('IUSidebarRailItem', SidebarRailItem)
     app.component('IUSidebarRailFooter', SidebarRailFooter)
+    app.component('IUTruncationTooltip', TruncationTooltip)
   }
 }

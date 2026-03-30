@@ -52,6 +52,7 @@
     "vue-tsc": "^2.0.7"
   },
   "dependencies": {
-    "@vueuse/core": "^14.2.1"
+    "@vueuse/core": "^14.2.1",
+    "floating-vue": "^5.2.2"
   }
 }

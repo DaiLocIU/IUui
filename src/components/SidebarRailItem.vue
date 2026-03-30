@@ -2,6 +2,7 @@
 import { computed, useAttrs } from "vue";
 
 import type { SidebarRailItemData } from "../system/sidebarRail";
+import TruncationTooltip from "./TruncationTooltip.vue";
 
 defineOptions({ inheritAttrs: false });
 
@@ -46,9 +47,11 @@ const label = computed(() => props.item.label);
       </span>
     </div>
 
-    <span class="min-w-0 flex-1 truncate font-medium">
-      {{ label }}
-    </span>
+    <TruncationTooltip class="min-w-0 flex-1">
+      <span class="block truncate font-medium">
+        {{ label }}
+      </span>
+    </TruncationTooltip>
 
     <span
       v-if="item.badge !== undefined && item.badge !== null"
