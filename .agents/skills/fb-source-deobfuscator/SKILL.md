@@ -1,11 +1,33 @@
 ---
 name: fb-source-deobfuscator
-description: Deobfuscate Meta/Facebook/Instagram JavaScript source and turn it into readable explanations or clean Vue implementations. Use when the user provides Meta-style obfuscated code — identified by __d() module wrappers, Stylex atomic classes, babelHelpers calls, react-compiler-runtime cache arrays, or Comet/Base React components — and asks to explain, decode, convert, or port it to Vue. Always run the full decode-then-explain-then-plan sequence before writing any code, even if the user asks to skip straight to implementation.
+description: Deobfuscate Meta/Facebook/Instagram JavaScript source and turn it into readable explanations or clean Vue implementations. Use when the user provides Meta-style obfuscated code — identified by __d() module wrappers, Stylex atomic classes, babelHelpers calls, react-compiler-runtime cache arrays, or Comet/Base React components — and asks to explain, decode, convert, or port it to Vue. Always use `grill-me` first, then run the full decode-then-explain-then-plan sequence before writing any code, even if the user asks to skip straight to implementation.
 ---
 
 # FB Source Deobfuscator & Vue Clone
 
-Reverse engineer Meta internal JavaScript structure before writing any explanation or port. Strip compiler noise first, rename variables from behavior, and only then explain or implement.
+Reverse engineer Meta internal JavaScript structure before writing any explanation or port. Start with `grill-me` to pin down scope and constraints, then strip compiler noise, rename variables from behavior, and only then explain or implement.
+
+## Mandatory First Step: Use `grill-me`
+
+Before any decode, explanation, planning, or implementation work, invoke the `grill-me` skill first.
+
+Use it to interrogate:
+
+- what the user wants from the source: explanation, cleanup, direct port, or library extraction
+- how faithful the Vue output must be: literal clone, behavior-preserving rewrite, or reusable abstraction
+- whether helper/provider/context modules should be ported or omitted
+- which behaviors must remain identical and which can be generalized
+- whether missing answers can be resolved from the codebase instead of by asking the user
+
+Rules:
+
+- `grill-me` is mandatory for every `fb-source-deobfuscator` task.
+- Ask questions one at a time, following the `grill-me` contract.
+- If a question can be answered by exploring the codebase, inspect the codebase instead of asking.
+- Do not start decode/output/code generation until the `grill-me` pass has established enough constraints to proceed.
+- If the user asks to skip questions or go straight to code, still run a condensed `grill-me` pass first and state the assumptions it fixed.
+
+Treat this as **Phase -1**. All later phases depend on it.
 
 ## Quick Example
 
@@ -114,6 +136,26 @@ const overflowValue = computed(() =>
 ```
 
 ---
+
+## Phase -1: Scope With `grill-me`
+
+Complete this phase before Phase 0.
+
+Minimum decisions to lock down:
+
+- target outcome: explain, decode, port, or extract into a library primitive
+- fidelity level: direct source mapping vs. generalized abstraction
+- target environment: Vue app clone, shared component library, or demo/example only
+- inclusion policy for helpers/providers/contexts
+- required comparison depth: concise summary vs. detailed React-to-Vue mapping
+
+At the end of Phase -1, state:
+
+- the chosen outcome
+- the chosen fidelity level
+- any unresolved assumptions you are carrying into decode
+
+Only then continue.
 
 ## Phase 0: Recognize Meta Patterns
 
@@ -261,7 +303,7 @@ babelHelpers.createClass(Ctor, methods)    →  class method definitions
 
 ## Phase 1: Decode Pass
 
-Complete this entire pass before writing any output.
+Complete this entire pass after Phase -1 and before writing any output.
 
 ### 1.0 React usage discovery
 
@@ -401,12 +443,13 @@ Base this on Phase 1.0 usage discovery.
 
 Do not write any code until all of these are complete:
 
+1. `grill-me` scope pass completed (Phase -1)
 1. React usage discovery (1.0)
 2. Benefits explained (2.1)
 3. Reusability verdict stated (2.8)
 4. Implementation plan described (below)
 
-If the user asks to skip straight to code, acknowledge the request, run the analysis in condensed form, state the verdict, then proceed.
+If the user asks to skip straight to code, acknowledge the request, run the `grill-me` pass in condensed form, then run the analysis in condensed form, state the verdict, then proceed.
 
 ### 3.1 File structure decision
 
@@ -531,18 +574,19 @@ Before delivering output, verify:
 
 Always produce in this order:
 
-1. Decode table
-2. Purpose and benefits
-3. React usage map
-4. Reusability verdict
-5. File structure
-6. Implementation plan
-7. Code files
-8. Line-by-line diff table
+1. `grill-me` assumptions summary
+2. Decode table
+3. Purpose and benefits
+4. React usage map
+5. Reusability verdict
+6. File structure
+7. Implementation plan
+8. Code files
+9. Line-by-line diff table
 
 If the user asks for a detailed Vue-versus-React comparison, append:
 
-9. **Feature mapping table** — one row per major behavior:
+10. **Feature mapping table** — one row per major behavior:
    - React source logic
    - Vue implementation
    - direct port vs. generalized abstraction
