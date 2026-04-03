@@ -15,9 +15,59 @@ import CometDensityModeStateProvider from './components/CometDensityModeStatePro
 import FDSTextContextNew from './components/FDSTextContextNew.vue'
 import FDSBaseTextImpl from './components/FDSBaseTextImpl.vue'
 import BaseListCell from './components/BaseListCell.vue'
+import BaseLink from './components/BaseLink.vue'
+import BaseButton from './components/BaseButton.vue'
+import CometBookmarkListItem from './components/CometBookmarkListItem.vue'
+import CometBookmarkListItemWrapper from './components/CometBookmarkListItemWrapper.vue'
+import FDSListCell from './components/FDSListCell.vue'
+import FDSListCellPressable from './components/FDSListCellPressable.vue'
+import FDSPressable from './components/FDSPressable.vue'
+import CometPressable from './components/CometPressable.vue'
+import WebPressable from './components/WebPressable.vue'
 import FDSTextPairing from './components/FDSTextPairing.vue'
 import FDSHeadlineWithAddOn from './components/FDSHeadlineWithAddOn.vue'
-import PDSTextPairing from './components/PDSTextPairing.vue'
+export {
+  provideBaseButtonPopoverContext,
+  provideBaseDisabledContext,
+  provideBasePlaceholderContext,
+  provideCometContainerPressableContext,
+  provideCometDangerouslySuppressInteractiveElementsContext,
+  useBaseButtonPopoverContext,
+  useBaseDisabledContext,
+  useBasePlaceholderContext,
+  useCometContainerPressableContext,
+  useCometDangerouslySuppressInteractiveElementsContext,
+} from './system/cometPressableKeys'
+export {
+  provideBaseLinkDefaultTarget,
+  provideBaseLinkNestedPressable,
+  provideBaseLinkRouter,
+  provideCometCustomLinkshimHash,
+  provideCometGHLRendering,
+  provideCometProductAttribution,
+  provideCometTrackingCode,
+  provideCometTrackingNodes,
+  useBaseLinkDefaultTarget,
+  useBaseLinkNestedPressable,
+  useBaseLinkRouter,
+  useCometCustomLinkshimHash,
+  useCometGHLRendering,
+  useCometProductAttribution,
+  useCometTrackingCode,
+  useCometTrackingNodes,
+} from './system/baseLinkKeys'
+export type {
+  BaseButtonPopoverContextValue,
+  CometContainerPressableContextValue,
+  CometContainerPressableRegistration,
+} from './system/cometPressableKeys'
+export type {
+  BaseLinkNavigationOptions,
+  BaseLinkPrefetchHandle,
+  BaseLinkRouterAdapter,
+  ProductAttributionContextValue,
+  TrackingCodeContextValue,
+} from './system/baseLinkKeys'
 export type { SidebarRailItemData, SidebarRailSectionData, SidebarRailFooterItemData } from './system/sidebarRail'
 export type { TruncationTooltipConfig } from './components/TruncationTooltip.vue'
 export type { FDSTextContextValue } from './system/fdsTextKeys'
@@ -31,7 +81,7 @@ const CometDensityProvider = CometDensityModeStateProvider
 const ImagePrimitive = BaseImage
 const IUListCell = BaseListCell
 
-export { BaseImage, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing }
+export { BaseImage, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, BaseLink, BaseButton, CometBookmarkListItem, CometBookmarkListItemWrapper, FDSPressable, CometPressable, IUListCell, FDSListCell, FDSListCellPressable, WebPressable, FDSHeadlineWithAddOn, FDSTextPairing }
 
 export default {
   install: (app: any) => {
@@ -51,9 +101,17 @@ export default {
     app.component('IUFDSTextContextNew', FDSTextContextNew)
     app.component('IUFDSBaseTextImpl', FDSBaseTextImpl)
     app.component('IUBaseListCell', BaseListCell)
+    app.component('IUBaseLink', BaseLink)
+    app.component('IUBaseButton', BaseButton)
+    app.component('IUCometBookmarkListItem', CometBookmarkListItem)
+    app.component('IUCometBookmarkListItemWrapper', CometBookmarkListItemWrapper)
+    app.component('IUFDSPressable', FDSPressable)
+    app.component('IUCometPressable', CometPressable)
     app.component('IUListCell', IUListCell)
+    app.component('IUFDSListCell', FDSListCell)
+    app.component('IUFDSListCellPressable', FDSListCellPressable)
+    app.component('IUWebPressable', WebPressable)
     app.component('IUFDSHeadlineWithAddOn', FDSHeadlineWithAddOn)
     app.component('IUFDSTextPairing', FDSTextPairing)
-    app.component('IUPDSTextPairing', PDSTextPairing)
   }
 }

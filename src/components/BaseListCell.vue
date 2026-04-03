@@ -6,9 +6,9 @@
     :aria-label="ariaLabel"
     :aria-labelledby="resolvedAriaLabelledby"
     :aria-selected="ariaSelected"
-    :class="[rootClasses, variant?.xstyleConfig?.root, xstyle, attrs.class]"
+    :class="[rootClasses, ...rootStyling.className, attrs.class]"
     :role="role"
-    :style="attrs.style"
+    :style="[...rootStyling.style, attrs.style]"
     :tabindex="tabIndex"
   >
     <IUBaseRow :vertical-align="resolvedVerticalAlign">
@@ -27,7 +27,8 @@
       <IUBaseRowItem
         v-if="hasAddOnStart"
         :vertical-align="resolvedAddOnStartVerticalAlign"
-        :class="[itemClass, addOnStartXStyle, variant?.xstyleConfig?.addOnStart]"
+        :class="[itemClass, ...addOnStartStyling.className]"
+        :style="addOnStartStyling.style"
       >
         <slot name="addOnStart" />
       </IUBaseRowItem>
@@ -36,9 +37,10 @@
         expanding
         vertical-align="center"
         wrap="forward"
-        :class="contentContainerClasses"
+        :class="contentContainerStyling.className"
+        :style="contentContainerStyling.style"
       >
-        <IUBaseRowItem :class="contentClasses">
+        <IUBaseRowItem :class="contentStyling.className" :style="contentStyling.style">
           <div
             v-if="contentId != null"
             aria-hidden="true"
@@ -53,19 +55,21 @@
           />
         </IUBaseRowItem>
 
-        <IUBaseRowItem
-          v-if="hasAddOnBottom"
-          :expanding="!isWebEnvironment"
-          :class="bottomAddOnClasses"
-        >
-          <slot name="addOnBottom" />
-        </IUBaseRowItem>
+      <IUBaseRowItem
+        v-if="hasAddOnBottom"
+        :expanding="!isWebEnvironment"
+        :class="bottomAddOnStyling.className"
+        :style="bottomAddOnStyling.style"
+      >
+        <slot name="addOnBottom" />
+      </IUBaseRowItem>
       </IUBaseRow>
 
       <IUBaseRowItem
         v-if="hasAddOnEnd"
         :vertical-align="resolvedAddOnEndVerticalAlign"
-        :class="[itemClass, addOnEndXStyle, variant?.xstyleConfig?.addOnEnd]"
+        :class="[itemClass, ...addOnEndStyling.className]"
+        :style="addOnEndStyling.style"
       >
         <slot name="addOnEnd" />
       </IUBaseRowItem>
@@ -89,13 +93,16 @@ import {
 
 import IUBaseRow from './IUBaseRow.vue'
 import IUBaseRowItem from './IUBaseRowItem.vue'
+import {
+  resolveStyling,
+  type StyleCapableValue,
+} from '../utils/resolveStyling'
 
 defineOptions({
   inheritAttrs: false,
 })
 
 type VerticalAlignValue = 'top' | 'center' | 'bottom' | 'stretch'
-type ClassLike = string | Record<string, boolean> | Array<string | Record<string, boolean>>
 
 export interface ListCellVariant {
   nestedSpacing?: number | string
@@ -106,12 +113,12 @@ export interface ListCellVariant {
   contentVerticalAlign?: Exclude<VerticalAlignValue, 'bottom' | 'stretch'> | 'top'
   addOnBottomResponsive?: boolean
   xstyleConfig?: {
-    root?: ClassLike
-    addOnStart?: ClassLike
-    contentContainer?: ClassLike
-    content?: ClassLike
-    addOnBottom?: ClassLike
-    addOnEnd?: ClassLike
+    root?: StyleCapableValue
+    addOnStart?: StyleCapableValue
+    contentContainer?: StyleCapableValue
+    content?: StyleCapableValue
+    addOnBottom?: StyleCapableValue
+    addOnEnd?: StyleCapableValue
   }
 }
 
@@ -119,22 +126,22 @@ export interface Props {
   actionVerticalAlign?: VerticalAlignValue
   addOnBottomResponsive?: boolean
   addOnEndVerticalAlign?: VerticalAlignValue
-  addOnEndXStyle?: ClassLike
+  addOnEndXStyle?: StyleCapableValue
   addOnStartVerticalAlign?: VerticalAlignValue
-  addOnStartXStyle?: ClassLike
+  addOnStartXStyle?: StyleCapableValue
   ariaHidden?: boolean
   ariaLabel?: string
   ariaLabelledby?: string
   contentId?: string
   contentVerticalAlign?: 'top' | 'center'
-  contentXStyle?: ClassLike
+  contentXStyle?: StyleCapableValue
   nestedSpacing?: number | string
   role?: string
   tabIndex?: number
   testid?: string
   variant?: ListCellVariant
   verticalAlign?: VerticalAlignValue
-  xstyle?: ClassLike
+  xstyle?: StyleCapableValue
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -212,25 +219,42 @@ const variantContentVerticalAlignClass = computed(() => ({
   top: 'self-start',
 }[props.variant?.contentVerticalAlign ?? 'center']))
 
-const contentContainerClasses = computed(() => [
-  'basis-0 flex-grow',
-  contentVerticalAlignClass.value,
-  variantContentVerticalAlignClass.value,
-  props.contentXStyle,
-  props.variant?.xstyleConfig?.contentContainer,
-])
-
-const contentClasses = computed(() => [
-  'min-w-0 flex-grow',
-  (props.addOnBottomResponsive || props.variant?.addOnBottomResponsive === true) && 'basis-0 min-w-0 max-w-full',
-  props.variant?.xstyleConfig?.content,
-])
-
-const bottomAddOnClasses = computed(() => [
-  'flex flex-col',
-  (props.addOnBottomResponsive || props.variant?.addOnBottomResponsive === true) && 'flex-grow',
-  props.variant?.xstyleConfig?.addOnBottom,
-])
+const rootStyling = computed(() => resolveStyling(props.variant?.xstyleConfig?.root, props.xstyle))
+const addOnStartStyling = computed(() =>
+  resolveStyling(props.addOnStartXStyle, props.variant?.xstyleConfig?.addOnStart),
+)
+const addOnEndStyling = computed(() =>
+  resolveStyling(props.addOnEndXStyle, props.variant?.xstyleConfig?.addOnEnd),
+)
+const contentContainerStyling = computed(() =>
+  resolveStyling(
+    [
+      'basis-0 flex-grow',
+      contentVerticalAlignClass.value,
+      variantContentVerticalAlignClass.value,
+    ],
+    props.contentXStyle,
+    props.variant?.xstyleConfig?.contentContainer,
+  ),
+)
+const contentStyling = computed(() =>
+  resolveStyling(
+    [
+      'min-w-0 flex-grow',
+      (props.addOnBottomResponsive || props.variant?.addOnBottomResponsive === true) && 'basis-0 min-w-0 max-w-full',
+    ],
+    props.variant?.xstyleConfig?.content,
+  ),
+)
+const bottomAddOnStyling = computed(() =>
+  resolveStyling(
+    [
+      'flex flex-col',
+      (props.addOnBottomResponsive || props.variant?.addOnBottomResponsive === true) && 'flex-grow',
+    ],
+    props.variant?.xstyleConfig?.addOnBottom,
+  ),
+)
 
 const ariaSelected = computed(() => (props.role === 'option' ? false : undefined))
 const resolvedAriaLabelledby = computed(() => (props.ariaLabel != null ? undefined : props.ariaLabelledby))
