@@ -1,161 +1,222 @@
 <script setup lang="ts">
-/**
- * IUBaseRow — Vue 3 port of BaseRow.react
- *
- * Handles all the low-level flex-row CSS and BaseRowContext (columns + wrap).
- * IURow is the Comet-layer on top that adds spacing/padding and nesting detection.
- *
- * Props mirror BaseRow exactly:
- *   align         — justify-content  (center | end | justify | start)  default: justify
- *   verticalAlign — align-items      (top | center | bottom | stretch)  default: stretch
- *   direction     — forward = row, backward = row-reverse               default: forward
- *   wrap          — none | forward (flex-wrap) | backward (rtl trick)   default: none
- *   columns       — 0-10 equal-width column slots                       default: 0
- *   expanding     — flex-1                                              default: false
- *   role          — ARIA role
- */
-import { computed, useSlots, ref } from "vue";
-import { provideRowContext } from "../system/layoutKeys";
-import type { WrapValue } from "../system/layoutKeys";
-import { useBaseRowA11yWrap } from "../composables/useBaseRowA11yWrap";
+import {
+  Comment,
+  Text,
+  computed,
+  defineComponent,
+  reactive,
+  useAttrs,
+  useSlots,
+  type PropType,
+  type StyleValue,
+  type VNode,
+} from 'vue'
 
-type AlignValue      = "center" | "end" | "justify" | "start";
-type VerticalAlign   = "top" | "center" | "bottom" | "stretch";
-type DirectionValue  = "forward" | "backward";
-// BaseRow's wrap: "none" | "forward" (=wrap) | "backward" (=wrap-reverse / RTL trick)
-type BaseWrapValue   = "none" | "forward" | "backward";
+import { useBaseRowA11yWrap } from '../composables/useBaseRowA11yWrap'
+import { provideRowContext, type RowContextValue, type WrapValue } from '../system/layoutKeys'
+import { resolveStyling, type StyleCapableValue } from '../utils/resolveStyling'
 
-const props = defineProps({
-  align: {
-    type: String as () => AlignValue,
-    default: "justify",
-    validator: (v: string) => ["center", "end", "justify", "start"].includes(v),
-  },
-  verticalAlign: {
-    type: String as () => VerticalAlign,
-    default: "stretch",
-    validator: (v: string) => ["top", "center", "bottom", "stretch"].includes(v),
-  },
-  direction: {
-    type: String as () => DirectionValue,
-    default: "forward",
-    validator: (v: string) => ["forward", "backward"].includes(v),
-  },
-  wrap: {
-    type: String as () => BaseWrapValue,
-    default: "none",
-    validator: (v: string) => ["none", "forward", "backward"].includes(v),
-  },
-  columns: {
-    type: Number,
-    default: 0,
-    validator: (v: number) => v >= 0 && v <= 10,
-  },
-  expanding: {
-    type: Boolean,
-    default: false,
-  },
-  role: {
-    type: String,
-    default: undefined,
-  },
-});
+defineOptions({
+  inheritAttrs: false,
+})
 
-// ─── A11y wrap ───────────────────────────────────────────────────────────────
-// When direction=forward & wrap=backward, detect if 2 children wrap onto
-// different lines and visually reverse them so DOM order ≠ visual order.
+type AlignValue = 'center' | 'end' | 'justify' | 'start'
+type VerticalAlignValue = 'top' | 'center' | 'bottom' | 'stretch'
+type DirectionValue = 'forward' | 'backward'
+type BaseWrapValue = 'none' | 'forward' | 'backward'
+
+interface Props {
+  align?: AlignValue
+  columns?: number
+  direction?: DirectionValue
+  expanding?: boolean
+  role?: string
+  verticalAlign?: VerticalAlignValue
+  wrap?: BaseWrapValue
+  xstyle?: StyleCapableValue
+}
+
+const RenderVNode = defineComponent({
+  name: 'RenderVNode',
+  props: {
+    vnode: {
+      type: Object as PropType<VNode>,
+      required: true,
+    },
+  },
+  setup(props) {
+    return () => props.vnode
+  },
+})
+
+const props = withDefaults(defineProps<Props>(), {
+  align: 'justify',
+  columns: 0,
+  direction: 'forward',
+  expanding: false,
+  role: undefined,
+  verticalAlign: 'stretch',
+  wrap: 'none',
+  xstyle: undefined,
+})
+
+const attrs = useAttrs()
+const slots = useSlots()
+
 const needsA11yCheck = computed(
-  () => props.direction === "forward" && props.wrap === "backward"
-);
-const [shouldReverse, containerRef] = useBaseRowA11yWrap(needsA11yCheck.value);
+  () => props.direction === 'forward' && props.wrap === 'backward',
+)
+const [shouldReverse, a11yContainerRef] = useBaseRowA11yWrap(needsA11yCheck)
 
-// ─── Row context (BaseRowContext equivalent) ──────────────────────────────
-// Map IUBaseRow's wrap vocabulary → our layout system's WrapValue
 const contextWrap = computed<WrapValue>(() => {
-  if (props.wrap === "forward")  return "wrap";
-  if (props.wrap === "backward") return "wrap-reverse";
-  return "none";
-});
+  if (props.wrap === 'forward') {
+    return 'wrap'
+  }
 
-provideRowContext({
+  if (props.wrap === 'backward') {
+    return 'wrap-reverse'
+  }
+
+  return 'none'
+})
+
+const rowContext = reactive<RowContextValue>({
   inRow: true,
-  spacing: 0,         // spacing is added by IURow on top
-  columns: props.columns,
-  wrap: contextWrap.value,
-});
+  spacing: 0,
+  get columns() {
+    return props.columns
+  },
+  get wrap() {
+    return contextWrap.value
+  },
+})
 
-// ─── Tailwind class maps ──────────────────────────────────────────────────────
-// justify-content — direction=backward flips start/end
-const alignFlip: Record<string, string> = { end: "start", start: "end" };
+provideRowContext(rowContext)
+
+const alignFlip: Record<'end' | 'start', 'start' | 'end'> = {
+  end: 'start',
+  start: 'end',
+}
+
 const alignClass = computed(() => {
   const effectiveAlign =
-    props.direction === "backward" &&
-    (props.align === "start" || props.align === "end")
+    props.direction === 'backward' && (props.align === 'start' || props.align === 'end')
       ? alignFlip[props.align]
-      : props.align;
+      : props.align
 
   return {
-    center:  "justify-center",
-    end:     "justify-end",
-    justify: "justify-between",
-    start:   "justify-start",
-  }[effectiveAlign] ?? "justify-between";
-});
+    center: 'justify-center',
+    end: 'justify-end',
+    justify: 'justify-between',
+    start: 'justify-start',
+  }[effectiveAlign]
+})
 
-// align-items
 const verticalAlignClass = computed(() => ({
-  top:     "items-start",
-  center:  "items-center",
-  bottom:  "items-end",
-  stretch: "items-stretch",
-}[props.verticalAlign] ?? "items-stretch"));
+  top: 'items-start',
+  center: 'items-center',
+  bottom: 'items-end',
+  stretch: 'items-stretch',
+}[props.verticalAlign]))
 
-// flex-direction
-const directionClass = computed(() =>
-  props.direction === "backward" ? "flex-row-reverse" : "flex-row"
-);
+const directionClass = computed(() => (
+  props.direction === 'backward' ? 'flex-row-reverse' : 'flex-row'
+))
 
-// flex-wrap — "backward" starts as nowrap; if a11y detects wrapping it adds forward-wrap
-const wrapClass = computed(() => {
-  if (props.wrap === "forward")   return "flex-wrap";
-  if (props.wrap === "backward") {
-    // When reversed + wrapped, switch to forward flex-wrap for proper visual order
-    return shouldReverse.value ? "flex-wrap" : "flex-nowrap";
+const slotChildren = computed(() => (
+  (slots.default?.() ?? []).filter((child) => {
+    if (child.type === Comment) {
+      return false
+    }
+
+    if (child.type === Text) {
+      return String(child.children ?? '').trim().length > 0
+    }
+
+    return true
+  })
+))
+
+const shouldUseWrapForwardOverride = computed(() => (
+  props.direction === 'forward'
+  && props.wrap === 'backward'
+  && shouldReverse.value
+  && slotChildren.value.length === 2
+))
+
+const wrapClasses = computed(() => {
+  if (props.wrap === 'forward') {
+    return ['flex-wrap']
   }
-  return "flex-nowrap";
-});
 
-// expanding
-const expandingClass = computed(() =>
-  props.expanding ? "flex-1 min-w-0" : ""
-);
+  if (props.wrap === 'backward') {
+    return ['flex-wrap-reverse', shouldUseWrapForwardOverride.value && 'flex-wrap']
+  }
 
-const classes = computed(() =>
-  [
-    "flex flex-shrink relative",
-    directionClass.value,
-    wrapClass.value,
+  return ['flex-nowrap']
+})
+
+const rootResolvedStyling = computed(() =>
+  resolveStyling(
+    'flex flex-shrink-0 relative',
+    props.expanding && 'basis-0 flex-grow flex-shrink min-w-0',
     alignClass.value,
     verticalAlignClass.value,
-    expandingClass.value,
-  ].filter(Boolean)
-);
+    wrapClasses.value,
+    directionClass.value,
+    props.xstyle,
+    attrs.class as StyleCapableValue,
+  ),
+)
+
+const rootStyles = computed<StyleValue[]>(() => {
+  const resolvedStyles = [...rootResolvedStyling.value.style]
+
+  if (attrs.style != null) {
+    resolvedStyles.push(attrs.style as StyleValue)
+  }
+
+  return resolvedStyles
+})
+
+const forwardedAttrs = computed(() => {
+  const {
+    class: _class,
+    style: _style,
+    role: _role,
+    ...rest
+  } = attrs as Record<string, unknown>
+
+  void _class
+  void _style
+  void _role
+
+  return rest
+})
+
+const orderedChildren = computed(() => {
+  const children = slotChildren.value
+
+  if (!shouldUseWrapForwardOverride.value) {
+    return children
+  }
+
+  return [children[1], children[0]]
+})
 </script>
 
 <template>
   <div
-    :ref="(el) => (containerRef = el as HTMLElement | null)"
-    :class="classes"
+    v-bind="forwardedAttrs"
+    ref="a11yContainerRef"
+    :class="rootResolvedStyling.className"
     :role="role"
+    :style="rootStyles"
   >
-    <!--
-      A11y reverse: when direction=forward, wrap=backward, and children
-      have visually wrapped AND there are exactly 2 slot items, we reverse
-      their visual order by rendering in the opposite order via CSS
-      (the flex-row-reverse + flex-wrap combo handles it).
-      In Vue we can't conditionally reorder slots, so we rely on the
-      CSS flex-row + flex-wrap vs flex-row-reverse + flex-nowrap toggle above.
-    -->
-    <slot></slot>
+    <RenderVNode
+      v-for="(child, index) in orderedChildren"
+      :key="child.key ?? index"
+      :vnode="child"
+    />
   </div>
 </template>

@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, unref, watch } from "vue";
 import type { Ref } from "vue";
 
 /**
@@ -11,17 +11,21 @@ import type { Ref } from "vue";
  *
  * Returns [shouldReverse, containerRef]
  */
-export function useBaseRowA11yWrap(enabled: boolean): [Ref<boolean>, Ref<HTMLElement | null>] {
+export function useBaseRowA11yWrap(enabled: boolean | Ref<boolean>): [Ref<boolean>, Ref<HTMLElement | null>] {
   const shouldReverse = ref(false);
   const containerRef = ref<HTMLElement | null>(null);
 
-  let observer: ResizeObserver | null = null;
-
   function checkWrap() {
-    if (!enabled || !containerRef.value) return;
+    if (!unref(enabled) || !containerRef.value) {
+      shouldReverse.value = false;
+      return;
+    }
 
     const children = Array.from(containerRef.value.children) as HTMLElement[];
-    if (children.length < 2) return;
+    if (children.length < 2) {
+      shouldReverse.value = false;
+      return;
+    }
 
     let prevRect: DOMRect | null = null;
     let wrapped = false;
@@ -41,16 +45,28 @@ export function useBaseRowA11yWrap(enabled: boolean): [Ref<boolean>, Ref<HTMLEle
     shouldReverse.value = wrapped;
   }
 
-  onMounted(() => {
-    if (!enabled) return;
-    observer = new ResizeObserver(checkWrap);
-    if (containerRef.value) observer.observe(containerRef.value);
-    checkWrap();
-  });
+  watch(
+    [() => unref(enabled), containerRef],
+    ([isEnabled, element], _, onCleanup) => {
+      shouldReverse.value = false;
 
-  onUnmounted(() => {
-    observer?.disconnect();
-  });
+      if (!isEnabled || element == null || typeof ResizeObserver === 'undefined') {
+        return;
+      }
+
+      const observer = new ResizeObserver(checkWrap);
+      observer.observe(element);
+      checkWrap();
+
+      onCleanup(() => {
+        observer.disconnect();
+      });
+    },
+    {
+      immediate: true,
+      flush: 'post',
+    },
+  );
 
   return [shouldReverse, containerRef];
 }

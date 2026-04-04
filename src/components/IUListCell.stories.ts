@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 
 import BaseListCell from './BaseListCell.vue'
+import BaseImage from './BaseImage.vue'
+import CometDensityModeStateProvider from './CometDensityModeStateProvider.vue'
+import FDSTextPairing from './FDSTextPairing.vue'
 
 const meta: Meta<typeof BaseListCell> = {
   title: 'Layout/IUListCell',
@@ -41,6 +44,29 @@ const meta: Meta<typeof BaseListCell> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+const metaAiVariant = {
+  addOnBottomResponsive: false,
+  addOnStartVerticalAlign: 'center' as const,
+  verticalAlign: 'center' as const,
+  xstyleConfig: {
+    addOnBottom: 'pt-[6px] pe-[6px] pb-[6px] ps-[6px]',
+    addOnEnd: 'pt-[6px] pe-[6px] pb-[6px] ps-[6px]',
+    addOnStart: 'pt-[6px] pe-[6px] pb-[6px] ps-[6px]',
+    content: 'pt-[6px] pe-[6px] pb-[6px] ps-[6px]',
+    root: [
+      'mt-[-6px] mb-[-6px] [margin-inline-start:-6px] [margin-inline-end:-6px] min-h-[56px]',
+      '[padding-inline:var(--x-paddingInline)]',
+      '[padding-block:var(--x-paddingBlock)]',
+      '[row-gap:var(--x-rowGap)]',
+      {
+        '--x-paddingInline': '8px',
+        '--x-paddingBlock': '8px',
+        '--x-rowGap': '8px',
+      },
+    ],
+  },
+}
+
 /** IUListCell is a layout primitive for composing structured list rows from named slots. */
 export const Default: Story = {
   render: (args) => ({
@@ -74,6 +100,50 @@ export const Default: Story = {
               Open
             </button>
           </template>
+        </IUListCell>
+      </div>
+    `,
+  }),
+}
+
+/** This example mirrors a Meta-style list cell variant using the raw Stylex-shaped payload resolved by BaseListCell. */
+export const MetaAIVariant: Story = {
+  render: () => ({
+    components: {
+      IUListCell: BaseListCell,
+      IUImage: BaseImage,
+      CometDensityModeStateProvider,
+      FDSTextPairing,
+    },
+    setup: () => ({
+      imageSrc: 'https://static.xx.fbcdn.net/rsrc.php/yp/r/WrVGNAPBHOg.webp',
+      variant: metaAiVariant,
+    }),
+    template: `
+      <div style="width: 360px; padding: 24px; border: 1px solid #e2e8f0; border-radius: 18px; background: white;">
+        <IUListCell
+          :variant="variant"
+          class="rounded-[16px] bg-white"
+        >
+          <template #addOnStart>
+            <IUImage
+              :src="imageSrc"
+              alt=""
+              :draggable="false"
+              :width="36"
+              :height="36"
+            />
+          </template>
+
+          <CometDensityModeStateProvider :initial-dense="true">
+            <FDSTextPairing
+              :level="4"
+              headline="Meta AI"
+              :headline-line-limit="2"
+              :meta-line-limit="1"
+              :reduce-emphasis="true"
+            />
+          </CometDensityModeStateProvider>
         </IUListCell>
       </div>
     `,

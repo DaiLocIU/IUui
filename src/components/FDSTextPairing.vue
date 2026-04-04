@@ -214,29 +214,29 @@ const hierarchyStyle = computed(() =>
 )
 
 const rootSpacingClass = computed(() => {
-  const map: Record<string, string> = {
-    '1': 'my-2',
-    '2': 'my-1.5',
-    '3': 'my-1',
-    '4': 'my-1',
-    entityHeader1: 'my-2',
-    entityHeader2: 'my-2',
+  const map: Record<FDSTextPairingLevel, string> = {
+    1: 'mt-[-7px] mb-[-7px]',
+    2: 'mt-[-6px] mb-[-6px]',
+    3: 'mt-[-5px] mb-[-5px]',
+    4: 'mt-[-5px] mb-[-5px]',
+    entityHeader1: 'mt-[-8px] mb-[-8px]',
+    entityHeader2: 'mt-[-8px] mb-[-8px]',
   }
 
-  return map[String(props.level)] ?? 'my-1'
+  return map[props.level]
 })
 
 const itemSpacingClass = computed(() => {
-  const map: Record<string, string> = {
-    '1': 'my-1.5',
-    '2': 'my-1',
-    '3': 'my-0.5',
-    '4': 'my-0.5',
-    entityHeader1: 'my-1',
-    entityHeader2: 'my-1',
+  const map: Record<FDSTextPairingLevel, string> = {
+    1: 'mt-[7px] mb-[7px]',
+    2: 'mt-[6px] mb-[6px]',
+    3: 'mt-[5px] mb-[5px]',
+    4: 'mt-[5px] mb-[5px]',
+    entityHeader1: 'mt-[8px] mb-[8px]',
+    entityHeader2: 'mt-[8px] mb-[8px]',
   }
 
-  return map[String(props.level)] ?? 'my-0.5'
+  return map[props.level]
 })
 
 defineExpose({
