@@ -204,3 +204,39 @@ export interface WebPressableProps {
   xstyle?: StyleCapableValue | ((state: PressableState) => StyleCapableValue)
   style?: CSSProperties | ((state: PressableState) => CSSProperties)
 }
+
+export interface PressableTextProps {
+  accessibilityLabel?: string
+  accessibilityRelationship?: AccessibilityRelationship
+  accessibilityRole?: string
+  accessibilityState?: AccessibilityState
+  className?: string | ((state: PressableState) => string | undefined)
+  direction?: string | 'none'
+  disabled?: boolean
+  draggable?: boolean
+  focusable?: boolean
+  link?: LinkProps
+  nativeID?: string
+  onBlur?: (e: FocusEvent) => void
+  onContextMenu?: (e: MouseEvent) => void
+  onFocus?: (e: FocusEvent) => void
+  onFocusChange?: (focused: boolean) => void
+  onFocusVisibleChange?: (visible: boolean) => void
+  onHoverChange?: (hovered: boolean) => void
+  onHoverEnd?: (e: HoverEvent) => void
+  onHoverMove?: (e: HoverEvent) => void
+  onHoverStart?: (e: HoverEvent) => void
+  onPress?: (e: MouseEvent | KeyboardEvent) => void
+  onPressChange?: (pressed: boolean) => void
+  onPressEnd?: (e: PressEvent) => void
+  onPressMove?: (e: PressEvent) => void
+  onPressStart?: (e: PressEvent) => void
+  preventContextMenu?: boolean
+  preventDefault?: boolean
+  selectable?: boolean
+  style?: CSSProperties | ((state: PressableState) => CSSProperties)
+  suppressFocusRing?: boolean
+  testID?: string
+  testOnly_state?: Partial<PressableState>
+  xstyle?: StyleCapableValue | ((state: PressableState) => StyleCapableValue)
+}

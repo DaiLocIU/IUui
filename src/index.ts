@@ -18,6 +18,7 @@ import BaseListCell from './components/BaseListCell.vue'
 import FDSTextPairing from './components/FDSTextPairing.vue'
 import FDSHeadlineWithAddOn from './components/FDSHeadlineWithAddOn.vue'
 import PDSTextPairing from './components/PDSTextPairing.vue'
+import PressableText from './components/WebPressable/PressableText.vue'
 export type { SidebarRailItemData, SidebarRailSectionData, SidebarRailFooterItemData } from './system/sidebarRail'
 export type { TruncationTooltipConfig } from './components/TruncationTooltip.vue'
 export type { FDSTextContextValue } from './system/fdsTextKeys'
@@ -31,7 +32,7 @@ const CometDensityProvider = CometDensityModeStateProvider
 const ImagePrimitive = BaseImage
 const IUListCell = BaseListCell
 
-export { BaseImage, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing }
+export { BaseImage, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing, PressableText }
 
 export default {
   install: (app: any) => {
@@ -55,5 +56,6 @@ export default {
     app.component('IUFDSHeadlineWithAddOn', FDSHeadlineWithAddOn)
     app.component('IUFDSTextPairing', FDSTextPairing)
     app.component('IUPDSTextPairing', PDSTextPairing)
+    app.component('IUPressableText', PressableText)
   }
 }
