@@ -1,15 +1,17 @@
 import type { CSSProperties, StyleValue } from 'vue'
+import type { ClassLike, StyleCapableValue } from '../components/WebPressable/types'
 
-export type ClassLike = string | Record<string, boolean> | Array<ClassLike>
-export interface StylexTokenObject {
+export type { ClassLike, StyleCapableValue } from '../components/WebPressable/types'
+
+interface StylexTokenObject {
   $$css: true
   [key: string]: unknown
 }
-export type StyleCapableValue =
-  | ClassLike
-  | CSSProperties
+
+type ResolvableStylingValue =
+  | StyleCapableValue
   | StylexTokenObject
-  | Array<StyleCapableValue | undefined | null | false>
+  | Array<ResolvableStylingValue | undefined | null | false>
   | undefined
   | null
   | false
@@ -70,9 +72,10 @@ const resolveStylexValue = (value: unknown): string | number | undefined => {
   return value
 }
 
-const isStylexObject = (value: Record<string, unknown>): boolean => value.$$css === true
+const isStylexObject = (value: Record<string, unknown>): value is StylexTokenObject =>
+  value.$$css === true
 
-const resolveStylexObject = (value: Record<string, unknown>): ResolvedStyling => {
+const resolveStylexObject = (value: StylexTokenObject): ResolvedStyling => {
   const className: Array<ClassLike> = []
   const resolvedEntries = Object.entries(value).flatMap(([key, entryValue]) => {
     if (key === '$$css') {
@@ -118,7 +121,7 @@ const looksLikeStyleObject = (value: Record<string, unknown>): boolean => {
 }
 
 const pushResolvedStyling = (
-  value: StyleCapableValue,
+  value: ResolvableStylingValue,
   className: Array<ClassLike>,
   style: StyleValue[],
 ): void => {
@@ -138,7 +141,7 @@ const pushResolvedStyling = (
 
   if (typeof value === 'object') {
     if (isStylexObject(value as Record<string, unknown>)) {
-      const resolvedStylexObject = resolveStylexObject(value as Record<string, unknown>)
+      const resolvedStylexObject = resolveStylexObject(value as StylexTokenObject)
 
       className.push(...resolvedStylexObject.className)
       style.push(...resolvedStylexObject.style)
