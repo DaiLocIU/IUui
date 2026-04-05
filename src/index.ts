@@ -3,6 +3,8 @@ import './style.css'
 // ─── Public API ───────────────────────────────────────────────────────────────
 // Primary layout primitives
 import BaseImage from './components/BaseImage.vue'
+import BaseLink from './components/BaseLink.vue'
+import BaseLinkDefaultTargetProvider from './components/BaseLinkDefaultTargetProvider.vue'
 import IURow from './components/IURow.vue'
 import IUColumn from './components/IUColumn.vue'
 import CometScrollView from './components/CometScrollView.vue'
@@ -32,11 +34,13 @@ const CometDensityProvider = CometDensityModeStateProvider
 const ImagePrimitive = BaseImage
 const IUListCell = BaseListCell
 
-export { BaseImage, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing, PressableText }
+export { BaseImage, BaseLink, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing, PressableText }
 
 export default {
   install: (app: any) => {
     app.component('IUImage', BaseImage)
+    app.component('IUBaseLink', BaseLink)
+    app.component('IUBaseLinkDefaultTargetProvider', BaseLinkDefaultTargetProvider)
     app.component('IURow', IURow)
     app.component('IUColumn', IUColumn)
     app.component('IURowItem', IURowItem)
