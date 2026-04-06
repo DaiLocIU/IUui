@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+:root {
+  --fds-animation-fade-out: cubic-bezier(0, 0, 1, 1);
+  --fds-duration-extra-extra-short-out: .1s;
+}
+
+@media (forced-colors: active) {
+  .cp-focus-ring.cp-focus-ring {
+    outline: var(--focus-ring-outline-forced-colors);
+  }
+}

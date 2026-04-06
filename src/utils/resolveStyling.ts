@@ -24,6 +24,7 @@ export interface ResolvedStyling {
 const STYLEX_TOKEN_CLASS_MAP: Record<string, string> = {
   x10b6aqq: '[padding-bottom:6px]',
   x12pbpz1: '[padding-top:var(--x-paddingBlock)]',
+  x1lliihq: 'block',
   x1gtkyd9: '[padding-bottom:var(--x-paddingBlock)]',
   x1icxu4v: '[padding-inline-end:6px]',
   x1r8uycs: '[row-gap:var(--x-rowGap)]',

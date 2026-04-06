@@ -2,6 +2,7 @@
   <component
     :is="nestedTag"
     v-if="isNestedLink"
+    ref="nestedElementRef"
     v-bind="passthroughAttrs"
     :id="id"
     :class="nestedResolvedStyling.className"
@@ -37,6 +38,7 @@
   <component
     :is="isBlockDisplay ? WebPressable : PressableText"
     v-else
+    ref="pressableRef"
     v-bind="resolvedPressableProps"
   >
     <BaseLinkNestedProvider>
@@ -167,6 +169,10 @@ const defaultTarget = inject(LINK_DEFAULT_TARGET_KEY, undefined)
 const isNestedLink = inject(NESTED_LINK_KEY, false)
 const isNestedHovered = ref(false)
 const isNestedFocused = ref(false)
+const nestedElementRef = ref<HTMLElement | null>(null)
+const pressableRef = ref<{
+  el?: unknown
+} | null>(null)
 const nestedStaticState = computed<PressableState>(() => ({
   disabled: props.disabled === true,
   focused: isNestedFocused.value,
@@ -368,6 +374,17 @@ const resolvedPressableProps = computed(() => ({
   ...sharedPressableProps.value,
   ...displaySpecificProps.value,
 }))
+
+defineExpose({
+  el: computed(() => {
+    if (isNestedLink) {
+      return nestedElementRef.value
+    }
+
+    const exposedElement = unref(pressableRef.value?.el)
+    return exposedElement instanceof HTMLElement ? exposedElement : null
+  }),
+})
 
 function navigateNestedLink(event: MouseEvent | KeyboardEvent): void {
   if (resolvedPreventDefault.value || props.disabled === true || resolvedHref.value === '#') {
