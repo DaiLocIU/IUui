@@ -54,7 +54,7 @@ export interface AccessibilityState {
   invalid?: boolean
   modal?: boolean
   orientation?: 'horizontal' | 'vertical'
-  pressed?: boolean
+  pressed?: boolean | 'mixed'
   readonly?: boolean
   required?: boolean
   selected?: boolean
