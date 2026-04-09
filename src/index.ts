@@ -5,6 +5,8 @@ import './style.css'
 import BaseImage from './components/BaseImage.vue'
 import BaseButton from './components/BaseButton'
 import BaseLink from './components/BaseLink.vue'
+import FDSPressable from './components/FDSPressable'
+import FDSListCellPressable from './components/FDSListCellPressable.vue'
 import BaseLinkDefaultTargetProvider from './components/BaseLinkDefaultTargetProvider.vue'
 import IURow from './components/IURow.vue'
 import IUColumn from './components/IUColumn.vue'
@@ -20,7 +22,6 @@ import FDSBaseTextImpl from './components/FDSBaseTextImpl.vue'
 import BaseListCell from './components/BaseListCell.vue'
 import FDSTextPairing from './components/FDSTextPairing.vue'
 import FDSHeadlineWithAddOn from './components/FDSHeadlineWithAddOn.vue'
-import PDSTextPairing from './components/PDSTextPairing.vue'
 import PressableText from './components/WebPressable/PressableText.vue'
 export type { SidebarRailItemData, SidebarRailSectionData, SidebarRailFooterItemData } from './system/sidebarRail'
 export type { TruncationTooltipConfig } from './components/TruncationTooltip.vue'
@@ -35,13 +36,15 @@ const CometDensityProvider = CometDensityModeStateProvider
 const ImagePrimitive = BaseImage
 const IUListCell = BaseListCell
 
-export { BaseImage, BaseButton, BaseLink, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing, PressableText }
+export { BaseImage, BaseButton, BaseLink, FDSPressable, FDSListCellPressable, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing, PressableText }
 
 export default {
   install: (app: any) => {
     app.component('IUImage', BaseImage)
     app.component('IUBaseButton', BaseButton)
     app.component('IUBaseLink', BaseLink)
+    app.component('IUFDSPressable', FDSPressable)
+    app.component('IUFDSListCellPressable', FDSListCellPressable)
     app.component('IUBaseLinkDefaultTargetProvider', BaseLinkDefaultTargetProvider)
     app.component('IURow', IURow)
     app.component('IUColumn', IUColumn)
@@ -61,7 +64,6 @@ export default {
     app.component('IUListCell', IUListCell)
     app.component('IUFDSHeadlineWithAddOn', FDSHeadlineWithAddOn)
     app.component('IUFDSTextPairing', FDSTextPairing)
-    app.component('IUPDSTextPairing', PDSTextPairing)
     app.component('IUPressableText', PressableText)
   }
 }

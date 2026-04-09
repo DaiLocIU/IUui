@@ -93,12 +93,40 @@ const overlayVisibleXStyle = [
   '[transition-duration:0s]',
 ].join(' ')
 
-const overlayWebXStyle = [
-  '[border-start-start-radius:inherit]',
-  '[border-start-end-radius:inherit]',
-  '[border-end-end-radius:inherit]',
-  '[border-end-start-radius:inherit]',
-].join(' ')
+const resolvedRadius = computed(() => {
+  if (props.radius == null) {
+    return undefined
+  }
+
+  return typeof props.radius === 'number'
+    ? `${props.radius}px`
+    : props.radius
+})
+
+const resolvedRadiusStyle = computed<CSSProperties | undefined>(() => {
+  if (resolvedRadius.value == null) {
+    return undefined
+  }
+  
+  return {
+    borderRadius: resolvedRadius.value,
+    borderStartStartRadius: resolvedRadius.value,
+    borderStartEndRadius: resolvedRadius.value,
+    borderEndEndRadius: resolvedRadius.value,
+    borderEndStartRadius: resolvedRadius.value,
+  }
+})
+
+const overlayWebXStyle = computed<StyleCapableValue>(() => {
+  return resolvedRadius.value == null
+    ? [
+        '[border-start-start-radius:inherit]',
+        '[border-start-end-radius:inherit]',
+        '[border-end-end-radius:inherit]',
+        '[border-end-start-radius:inherit]',
+      ].join(' ')
+    : undefined
+})
 
 watchEffect(() => {
   if (props.pressed) {
@@ -121,10 +149,6 @@ watchEffect(() => {
 })
 
 const overlayStyle = computed<CSSProperties | undefined>(() => {
-  if (lastVisualState.value == null) {
-    return undefined
-  }
-
   let bottom = 0
   let left = 0
   let right = 0
@@ -144,8 +168,12 @@ const overlayStyle = computed<CSSProperties | undefined>(() => {
     }
   }
 
+  if (resolvedRadiusStyle.value == null && props.offset == null) {
+    return undefined
+  }
+
   return {
-    ...(typeof props.radius === 'number' ? { borderRadius: props.radius } : {}),
+    ...resolvedRadiusStyle.value,
     bottom,
     left,
     right,
@@ -192,11 +220,11 @@ const activeStateXStyle = computed<StyleCapableValue | undefined>(() => {
 
 const overlayXStyle = computed<StyleCapableValue>(() => [
   overlayBaseXStyle,
-  overlayWebXStyle,
+  overlayWebXStyle.value,
   props.xstyle,
   activeStateXStyle.value,
   focusRingXStyle.value,
-  props.radius === '50%' && circleXStyle,
+  resolvedRadius.value === '50%' && circleXStyle,
 ])
 </script>
 

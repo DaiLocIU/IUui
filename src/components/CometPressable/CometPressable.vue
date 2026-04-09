@@ -60,6 +60,8 @@ import CometPressableOverlay from '../CometPressableOverlay.vue'
 import type { StyleCapableValue } from '../../utils/resolveStyling'
 import { useBaseDisabledContext } from '../../system/baseDisabledKeys'
 import type {
+  AccessibilityRelationship,
+  AccessibilityState,
   HoverEvent,
   LinkProps,
   PressEvent,
@@ -92,6 +94,54 @@ const props = defineProps({
     type: null as unknown as PropType<boolean | undefined>,
     default: undefined,
   },
+  ariaActivedescendant: {
+    type: String,
+    default: undefined,
+  },
+  ariaChecked: {
+    type: null as unknown as PropType<AccessibilityState['checked']>,
+    default: undefined,
+  },
+  ariaControls: {
+    type: String,
+    default: undefined,
+  },
+  ariaCurrent: {
+    type: null as unknown as PropType<AccessibilityRelationship['current']>,
+    default: undefined,
+  },
+  ariaDescribedby: {
+    type: String,
+    default: undefined,
+  },
+  ariaExpanded: {
+    type: null as unknown as PropType<AccessibilityState['expanded']>,
+    default: undefined,
+  },
+  ariaHaspopup: {
+    type: null as unknown as PropType<AccessibilityRelationship['haspopup']>,
+    default: undefined,
+  },
+  ariaHidden: {
+    type: null as unknown as PropType<AccessibilityState['hidden']>,
+    default: undefined,
+  },
+  ariaInvalid: {
+    type: null as unknown as PropType<AccessibilityState['invalid']>,
+    default: undefined,
+  },
+  ariaLabel: {
+    type: String,
+    default: undefined,
+  },
+  ariaLabelledby: {
+    type: String,
+    default: undefined,
+  },
+  ariaPressed: {
+    type: null as unknown as PropType<AccessibilityState['pressed']>,
+    default: undefined,
+  },
   cursorDisabled: {
     type: Boolean,
     default: false,
@@ -110,6 +160,10 @@ const props = defineProps({
   },
   dynamicHoverTranslationPercent: {
     type: Number,
+    default: undefined,
+  },
+  focusable: {
+    type: null as unknown as PropType<boolean | undefined>,
     default: undefined,
   },
   expanding: {
@@ -131,6 +185,10 @@ const props = defineProps({
   isUsingCustomFocusRing: {
     type: Boolean,
     default: false,
+  },
+  id: {
+    type: String,
+    default: undefined,
   },
   linkProps: {
     type: null as unknown as PropType<LinkProps | null>,
@@ -239,6 +297,10 @@ const props = defineProps({
     } | undefined>,
     default: undefined,
   },
+  role: {
+    type: String,
+    default: undefined,
+  },
   showDynamicHover: {
     type: null as unknown as PropType<boolean | undefined>,
     default: undefined,
@@ -250,6 +312,10 @@ const props = defineProps({
   suppressFocusRing: {
     type: Boolean,
     default: false,
+  },
+  suppressHydrationWarning: {
+    type: null as unknown as PropType<boolean | undefined>,
+    default: undefined,
   },
   testOnly_pressed: {
     type: Boolean,
@@ -471,8 +537,22 @@ const slotState = computed(() => ({
 
 const sharedBranchProps = computed(() => ({
   ...passthroughAttrs.value,
+  ariaActivedescendant: props.ariaActivedescendant,
+  ariaChecked: props.ariaChecked,
+  ariaControls: props.ariaControls,
+  ariaCurrent: props.ariaCurrent,
+  ariaDescribedby: props.ariaDescribedby,
+  ariaExpanded: props.ariaExpanded,
+  ariaHaspopup: props.ariaHaspopup,
+  ariaHidden: props.ariaHidden,
+  ariaInvalid: props.ariaInvalid,
+  ariaLabel: props.ariaLabel,
+  ariaLabelledby: props.ariaLabelledby,
+  ariaPressed: props.ariaPressed,
   disabled: effectiveDisabled.value,
   display: normalizedDisplay.value,
+  focusable: props.focusable,
+  id: props.id,
   onBlur: props.onFocusOut,
   onClick: handlePress.value,
   onContextMenu: props.onContextMenu,
@@ -487,7 +567,9 @@ const sharedBranchProps = computed(() => ({
   onPressEnd: props.onPressOut,
   onPressStart: props.onPressIn,
   preventContextMenu: props.preventContextMenu,
+  role: props.role,
   style: interactiveStyle.value as unknown as WebPressableProps['style'],
+  suppressHydrationWarning: props.suppressHydrationWarning,
   suppressFocusRing: true,
   xstyle: interactiveXStyle.value,
 }))
