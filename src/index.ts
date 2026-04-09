@@ -7,6 +7,7 @@ import BaseButton from './components/BaseButton'
 import BaseLink from './components/BaseLink.vue'
 import FDSPressable from './components/FDSPressable'
 import FDSListCellPressable from './components/FDSListCellPressable.vue'
+import CometBookmarkListItem from './components/CometBookmarkListItem.vue'
 import BaseLinkDefaultTargetProvider from './components/BaseLinkDefaultTargetProvider.vue'
 import IURow from './components/IURow.vue'
 import IUColumn from './components/IUColumn.vue'
@@ -36,7 +37,7 @@ const CometDensityProvider = CometDensityModeStateProvider
 const ImagePrimitive = BaseImage
 const IUListCell = BaseListCell
 
-export { BaseImage, BaseButton, BaseLink, FDSPressable, FDSListCellPressable, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing, PressableText }
+export { BaseImage, BaseButton, BaseLink, FDSPressable, FDSListCellPressable, CometBookmarkListItem, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing, PressableText }
 
 export default {
   install: (app: any) => {
@@ -45,6 +46,7 @@ export default {
     app.component('IUBaseLink', BaseLink)
     app.component('IUFDSPressable', FDSPressable)
     app.component('IUFDSListCellPressable', FDSListCellPressable)
+    app.component('IUCometBookmarkListItem', CometBookmarkListItem)
     app.component('IUBaseLinkDefaultTargetProvider', BaseLinkDefaultTargetProvider)
     app.component('IURow', IURow)
     app.component('IUColumn', IUColumn)
