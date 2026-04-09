@@ -3,6 +3,7 @@
 :root {
   --fds-animation-fade-out: cubic-bezier(0, 0, 1, 1);
   --fds-duration-extra-extra-short-out: .1s;
+  --hosted-view-selected-state: rgba(29, 133, 252, .1);
 }
 
 @media (forced-colors: active) {
