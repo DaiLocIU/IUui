@@ -2,8 +2,47 @@
 
 :root {
   --fds-animation-fade-out: cubic-bezier(0, 0, 1, 1);
+  --glimmer-animation-direction: alternate;
+  --glimmer-animation-duration: 1000ms;
+  --glimmer-animation-timing-function: steps(10, end);
+  --glimmer-base-opaque: #979A9F;
+  --glimmer-high-contrast-base-opaque: #65686C;
+  --glimmer-opacity-max: 0.5;
+  --glimmer-opacity-min: 0.15;
+  --glimmer-opacity-high-contrast-max: 1;
+  --glimmer-opacity-high-contrast-min: 0.08;
   --fds-duration-extra-extra-short-out: .1s;
   --hosted-view-selected-state: rgba(29, 133, 252, .1);
+}
+
+@keyframes iu-glimmer-pulse {
+  0% {
+    opacity: var(--glimmer-opacity-min);
+  }
+
+  100% {
+    opacity: var(--glimmer-opacity-max);
+  }
+}
+
+@keyframes iu-glimmer-pulse-high-contrast {
+  0% {
+    opacity: var(--glimmer-opacity-high-contrast-min);
+  }
+
+  100% {
+    opacity: var(--glimmer-opacity-high-contrast-max);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .fds-glimmer-high-contrast-surface.fds-glimmer-high-contrast-surface {
+    background-color: var(--glimmer-high-contrast-base-opaque);
+  }
+
+  .fds-glimmer-high-contrast-animation.fds-glimmer-high-contrast-animation {
+    animation-name: iu-glimmer-pulse-high-contrast;
+  }
 }
 
 @media (forced-colors: active) {

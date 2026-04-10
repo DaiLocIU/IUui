@@ -4,8 +4,10 @@ import './style.css'
 // Primary layout primitives
 import BaseImage from './components/BaseImage.vue'
 import BaseButton from './components/BaseButton'
+import BaseGlimmer from './components/BaseGlimmer.vue'
 import BaseLoadingStateElement from './components/BaseLoadingStateElement.vue'
 import BaseLink from './components/BaseLink.vue'
+import FDSGlimmer from './components/FDSGlimmer.vue'
 import FDSPressable from './components/FDSPressable'
 import FDSListCellPressable from './components/FDSListCellPressable.vue'
 import CometBookmarkListItem from './components/CometBookmarkListItem.vue'
@@ -28,10 +30,18 @@ import BaseListCell from './components/BaseListCell.vue'
 import FDSTextPairing from './components/FDSTextPairing.vue'
 import FDSHeadlineWithAddOn from './components/FDSHeadlineWithAddOn.vue'
 import PressableText from './components/WebPressable/PressableText.vue'
+import useGlimmerPausedState from './composables/useGlimmerPausedState'
+import usePartialViewImpression from './composables/usePartialViewImpression'
 export type { SidebarRailItemData, SidebarRailSectionData, SidebarRailFooterItemData } from './system/sidebarRail'
 export type { TruncationTooltipConfig } from './components/TruncationTooltip.vue'
 export type { FDSTextContextValue } from './system/fdsTextKeys'
 export type { FDSTextPairingLevel } from './utils/getFDSTextHierarchyStyle'
+export type {
+  PartialViewHiddenReason,
+  PartialViewImpressionEndPayload,
+  UsePartialViewImpressionOptions,
+} from './composables/usePartialViewImpression'
+export type { UseGlimmerPausedStateReturn } from './composables/useGlimmerPausedState'
 
 // Advanced — use for error boundaries and Suspense wrappers
 import IURowItem from './components/IURowItem.vue'
@@ -41,14 +51,16 @@ const CometDensityProvider = CometDensityModeStateProvider
 const ImagePrimitive = BaseImage
 const IUListCell = BaseListCell
 
-export { BaseImage, BaseButton, BaseLoadingStateElement, BaseLink, FDSPressable, FDSListCellPressable, CometBookmarkListItem, CometBookmarkListItemWrapper, CometClassicHomeRailSeparator, CometHomeLeftRailBookmarkRefetchListCell, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing, PressableText }
+export { BaseImage, BaseButton, BaseGlimmer, BaseLoadingStateElement, BaseLink, FDSGlimmer, FDSPressable, FDSListCellPressable, CometBookmarkListItem, CometBookmarkListItemWrapper, CometClassicHomeRailSeparator, CometHomeLeftRailBookmarkRefetchListCell, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing, PressableText, useGlimmerPausedState, usePartialViewImpression }
 
 export default {
   install: (app: any) => {
     app.component('IUImage', BaseImage)
     app.component('IUBaseButton', BaseButton)
+    app.component('IUBaseGlimmer', BaseGlimmer)
     app.component('IUBaseLoadingStateElement', BaseLoadingStateElement)
     app.component('IUBaseLink', BaseLink)
+    app.component('IUFDSGlimmer', FDSGlimmer)
     app.component('IUFDSPressable', FDSPressable)
     app.component('IUFDSListCellPressable', FDSListCellPressable)
     app.component('IUCometBookmarkListItem', CometBookmarkListItem)
