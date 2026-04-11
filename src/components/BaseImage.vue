@@ -6,25 +6,28 @@
     :alt="alt"
     :aria-hidden="isDecorative || undefined"
     :aria-labelledby="ariaLabelledby"
-    :class="[objectFitClass, variant?.xstyleConfig?.image, xstyle, attrs.class]"
+    :class="resolvedStyling.className"
     :elementtiming="elementtiming"
     :referrerpolicy="referrerPolicy"
     :sizes="sizes"
     :src="src"
     :srcset="srcSet"
-    :style="attrs.style"
+    :style="resolvedStyles"
+    @error="handleError"
     @load="handleLoad"
   />
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, useAttrs } from 'vue'
+import { computed, onMounted, ref, useAttrs, type StyleValue } from 'vue'
+
+import { resolveStyling, type StyleCapableValue } from '../utils/resolveStyling'
 
 defineOptions({
   inheritAttrs: false,
 })
 
-type ObjectFitValue = 'contain' | 'cover' | 'fill'
+export type ObjectFitValue = 'contain' | 'cover' | 'fill'
 
 export interface ImageVariant {
   xstyleConfig?: {
@@ -38,6 +41,7 @@ export interface Props {
   elementtiming?: string
   isDecorative?: boolean
   objectFit?: ObjectFitValue
+  onError?: (event?: Event) => void
   onLoad?: (event?: Event) => void
   referrerPolicy?: ReferrerPolicy
   sizes?: string
@@ -45,7 +49,7 @@ export interface Props {
   srcSet?: string
   testid?: string
   variant?: ImageVariant
-  xstyle?: string | Record<string, boolean>
+  xstyle?: StyleCapableValue
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -54,6 +58,7 @@ const props = withDefaults(defineProps<Props>(), {
   elementtiming: undefined,
   isDecorative: false,
   objectFit: 'fill',
+  onError: undefined,
   onLoad: undefined,
   referrerPolicy: 'origin-when-cross-origin',
   sizes: undefined,
@@ -79,6 +84,25 @@ const objectFitClass = computed(() => {
   return map[props.objectFit]
 })
 
+const resolvedStyling = computed(() =>
+  resolveStyling(
+    objectFitClass.value,
+    props.variant?.xstyleConfig?.image,
+    props.xstyle,
+    attrs.class as StyleCapableValue,
+  ),
+)
+
+const resolvedStyles = computed<StyleValue[]>(() => {
+  const styles = [...resolvedStyling.value.style]
+
+  if (attrs.style != null) {
+    styles.push(attrs.style as StyleValue)
+  }
+
+  return styles
+})
+
 const forwardedAttrs = computed(() => {
   const {
     testid: _testid,
@@ -101,6 +125,10 @@ const forwardedAttrs = computed(() => {
 
 const handleLoad = (event?: Event): void => {
   props.onLoad?.(event)
+}
+
+const handleError = (event?: Event): void => {
+  props.onError?.(event)
 }
 
 if (import.meta.env.DEV && props.src === '') {

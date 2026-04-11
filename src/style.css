@@ -12,6 +12,11 @@
   --glimmer-opacity-high-contrast-max: 1;
   --glimmer-opacity-high-contrast-min: 0.08;
   --fds-duration-extra-extra-short-out: .1s;
+  --badge-background-color-red: #DD2334;
+  --card-background: #FFFFFF;
+  --media-large-corner-radius: 16px;
+  --media-small-corner-radius: 12px;
+  --media-corner-radius: 12px;
   --hosted-view-selected-state: rgba(29, 133, 252, .1);
 }
 

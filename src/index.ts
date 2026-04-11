@@ -3,11 +3,16 @@ import './style.css'
 // ─── Public API ───────────────────────────────────────────────────────────────
 // Primary layout primitives
 import BaseImage from './components/BaseImage.vue'
+import CometImage from './components/CometImage.vue'
+import BaseBadge from './components/BaseBadge.vue'
+import BaseStyledBadge from './components/BaseStyledBadge.vue'
 import BaseButton from './components/BaseButton'
 import BaseGlimmer from './components/BaseGlimmer.vue'
 import BaseLoadingStateElement from './components/BaseLoadingStateElement.vue'
 import BaseLink from './components/BaseLink.vue'
 import FDSGlimmer from './components/FDSGlimmer.vue'
+import FDSListCellGlimmer from './components/FDSListCellGlimmer.vue'
+import ScreenReaderText from './components/ScreenReaderText.vue'
 import FDSPressable from './components/FDSPressable'
 import FDSListCellPressable from './components/FDSListCellPressable.vue'
 import CometBookmarkListItem from './components/CometBookmarkListItem.vue'
@@ -32,10 +37,35 @@ import FDSHeadlineWithAddOn from './components/FDSHeadlineWithAddOn.vue'
 import PressableText from './components/WebPressable/PressableText.vue'
 import useGlimmerPausedState from './composables/useGlimmerPausedState'
 import usePartialViewImpression from './composables/usePartialViewImpression'
+import focusManager, {
+  focusElement,
+  focusFirst,
+  focusNext,
+  focusNextContained,
+  focusPrevious,
+  focusPreviousContained,
+  getAllNodesFromOneOrManyQueries,
+  getFirstNodeFromOneOrManyQueries,
+  isFocusingWithoutUserIntent,
+  wasElementAutoFocused,
+} from './utils/focusManager'
+import getTabbableNodes, {
+  createDOMFocusQueryScope,
+} from './utils/getTabbableNodes'
 export type { SidebarRailItemData, SidebarRailSectionData, SidebarRailFooterItemData } from './system/sidebarRail'
 export type { TruncationTooltipConfig } from './components/TruncationTooltip.vue'
 export type { FDSTextContextValue } from './system/fdsTextKeys'
 export type { FDSTextPairingLevel } from './utils/getFDSTextHierarchyStyle'
+export type {
+  DOMFocusQuery,
+  FocusNodePredicate,
+  FocusQueryScope,
+  TabbableNodesResult,
+} from './utils/getTabbableNodes'
+export type {
+  FocusContainmentEvent,
+  FocusElementOptions,
+} from './utils/focusManager'
 export type {
   PartialViewHiddenReason,
   PartialViewImpressionEndPayload,
@@ -51,16 +81,21 @@ const CometDensityProvider = CometDensityModeStateProvider
 const ImagePrimitive = BaseImage
 const IUListCell = BaseListCell
 
-export { BaseImage, BaseButton, BaseGlimmer, BaseLoadingStateElement, BaseLink, FDSGlimmer, FDSPressable, FDSListCellPressable, CometBookmarkListItem, CometBookmarkListItemWrapper, CometClassicHomeRailSeparator, CometHomeLeftRailBookmarkRefetchListCell, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing, PressableText, useGlimmerPausedState, usePartialViewImpression }
+export { BaseImage, CometImage, BaseBadge, BaseStyledBadge, BaseButton, BaseGlimmer, BaseLoadingStateElement, BaseLink, FDSGlimmer, FDSListCellGlimmer, ScreenReaderText, FDSPressable, FDSListCellPressable, CometBookmarkListItem, CometBookmarkListItemWrapper, CometClassicHomeRailSeparator, CometHomeLeftRailBookmarkRefetchListCell, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing, PressableText, createDOMFocusQueryScope, focusElement, focusFirst, focusManager, focusNext, focusNextContained, focusPrevious, focusPreviousContained, getAllNodesFromOneOrManyQueries, getFirstNodeFromOneOrManyQueries, getTabbableNodes, isFocusingWithoutUserIntent, useGlimmerPausedState, usePartialViewImpression, wasElementAutoFocused }
 
 export default {
   install: (app: any) => {
     app.component('IUImage', BaseImage)
+    app.component('IUCometImage', CometImage)
+    app.component('IUBaseBadge', BaseBadge)
+    app.component('IUBaseStyledBadge', BaseStyledBadge)
     app.component('IUBaseButton', BaseButton)
     app.component('IUBaseGlimmer', BaseGlimmer)
     app.component('IUBaseLoadingStateElement', BaseLoadingStateElement)
     app.component('IUBaseLink', BaseLink)
     app.component('IUFDSGlimmer', FDSGlimmer)
+    app.component('IUFDSListCellGlimmer', FDSListCellGlimmer)
+    app.component('IUScreenReaderText', ScreenReaderText)
     app.component('IUFDSPressable', FDSPressable)
     app.component('IUFDSListCellPressable', FDSListCellPressable)
     app.component('IUCometBookmarkListItem', CometBookmarkListItem)
