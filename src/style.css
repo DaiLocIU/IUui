@@ -13,10 +13,21 @@
   --glimmer-opacity-high-contrast-min: 0.08;
   --fds-duration-extra-extra-short-out: .1s;
   --badge-background-color-red: #DD2334;
+  --comment-background: #F0F2F5;
   --card-background: #FFFFFF;
   --media-large-corner-radius: 16px;
   --media-small-corner-radius: 12px;
   --media-corner-radius: 12px;
+  --blue-link: #0064D1;
+  --accent: #0866FF;
+  --badge-background-color-dark-gray: #65686C;
+  --divider-on-color: #5C5E62;
+  --badge-background-color-gray: #B0B3B8;
+  --badge-background-color-green: #24832C;
+  --positive: #24832C;
+  --badge-background-color-light-blue: #E7F3FF;
+  --badge-background-color-red: #DD2334;
+  --badge-background-color-yellow: #F9CF00;
   --hosted-view-selected-state: rgba(29, 133, 252, .1);
 }
 
