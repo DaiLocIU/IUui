@@ -3,6 +3,8 @@ import './style.css'
 // ─── Public API ───────────────────────────────────────────────────────────────
 // Primary layout primitives
 import BaseImage from './components/BaseImage.vue'
+import BaseSVGIcon from './components/BaseSVGIcon.vue'
+import CometSVGIcon from './components/CometSVGIcon.vue'
 import CometImage from './components/CometImage.vue'
 import BaseBadge from './components/BaseBadge.vue'
 import BaseStyledBadge from './components/BaseStyledBadge.vue'
@@ -38,6 +40,11 @@ import FDSHeadlineWithAddOn from './components/FDSHeadlineWithAddOn.vue'
 import PressableText from './components/WebPressable/PressableText.vue'
 import useGlimmerPausedState from './composables/useGlimmerPausedState'
 import usePartialViewImpression from './composables/usePartialViewImpression'
+import {
+  provideBaseIsDecorativeContext,
+  useBaseIsDecorativeContext,
+} from './composables/useBaseIsDecorativeContext'
+import { useCometIconColors } from './composables/useCometIconColors'
 import focusManager, {
   focusElement,
   focusFirst,
@@ -88,7 +95,7 @@ const CometDensityProvider = CometDensityModeStateProvider
 const ImagePrimitive = BaseImage
 const IUListCell = BaseListCell
 
-export { BaseImage, CometImage, BaseBadge, BaseStyledBadge, FDSBadge, BaseButton, BaseGlimmer, BaseLoadingStateElement, BaseLink, FDSGlimmer, FDSListCellGlimmer, ScreenReaderText, FDSPressable, FDSListCellPressable, CometBookmarkListItem, CometBookmarkListItemWrapper, CometClassicHomeRailSeparator, CometHomeLeftRailBookmarkRefetchListCell, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing, PressableText, createDOMFocusQueryScope, focusElement, focusFirst, focusManager, focusNext, focusNextContained, focusPrevious, focusPreviousContained, getAllNodesFromOneOrManyQueries, getFDSBadgeColorStyle, getFirstNodeFromOneOrManyQueries, getTabbableNodes, isFocusingWithoutUserIntent, useGlimmerPausedState, usePartialViewImpression, wasElementAutoFocused }
+export { BaseImage, CometImage, BaseBadge, BaseStyledBadge, FDSBadge, BaseButton, BaseGlimmer, BaseLoadingStateElement, BaseLink, FDSGlimmer, FDSListCellGlimmer, ScreenReaderText, FDSPressable, FDSListCellPressable, CometBookmarkListItem, CometBookmarkListItemWrapper, CometClassicHomeRailSeparator, CometHomeLeftRailBookmarkRefetchListCell, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing, PressableText, BaseSVGIcon, CometSVGIcon, createDOMFocusQueryScope, focusElement, focusFirst, focusManager, focusNext, focusNextContained, focusPrevious, focusPreviousContained, getAllNodesFromOneOrManyQueries, getFDSBadgeColorStyle, getFirstNodeFromOneOrManyQueries, getTabbableNodes, isFocusingWithoutUserIntent, provideBaseIsDecorativeContext, useBaseIsDecorativeContext, useCometIconColors, useGlimmerPausedState, usePartialViewImpression, wasElementAutoFocused }
 
 export default {
   install: (app: any) => {
@@ -130,5 +137,7 @@ export default {
     app.component('IUFDSHeadlineWithAddOn', FDSHeadlineWithAddOn)
     app.component('IUFDSTextPairing', FDSTextPairing)
     app.component('IUPressableText', PressableText)
+    app.component('IUBaseSVGIcon', BaseSVGIcon)
+    app.component('IUCometSVGIcon', CometSVGIcon)
   }
 }

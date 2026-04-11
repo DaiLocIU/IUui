@@ -12,6 +12,9 @@
   --glimmer-opacity-high-contrast-max: 1;
   --glimmer-opacity-high-contrast-min: 0.08;
   --fds-duration-extra-extra-short-out: .1s;
+  --fds-fast: .1s;
+  --fds-soft: cubic-bezier(0, 0, 1, 1);
+  --shadow-1: rgba(0, 0, 0, .1);
   --badge-background-color-red: #DD2334;
   --comment-background: #F0F2F5;
   --card-background: #FFFFFF;
@@ -29,6 +32,32 @@
   --badge-background-color-red: #DD2334;
   --badge-background-color-yellow: #F9CF00;
   --hosted-view-selected-state: rgba(29, 133, 252, .1);
+
+  /* New Icon & UI Colors */
+  --primary-button-background: #0866FF;
+  --base-cherry: #FB3C44;
+  --base-lemon: #F9CF00;
+  --base-lime: #3FBB46;
+  --always-black: black;
+  --disabled-icon: #B0B3B8;
+  --fb-logo: #0866FF;
+  --fb-wordmark: #0866FF;
+  --secondary-icon: #65686C;
+  --negative: #DD2334;
+  --placeholder-icon: #65686C;
+  --primary-icon: #080809;
+  --primary-button-icon-on-color: #000000;
+  --primary-button-icon-on-media: #080809;
+  --primary-deemphasized-button-icon: #0064D1;
+  --primary-icon-on-media: #FFFFFF;
+  --rating-star-active: #E0761A;
+  --rating-star-active-on-color: #FFFFFF;
+  --rating-star-active-on-media: #FFFFFF;
+  --secondary-button-icon-on-media: #FFFFFF;
+  --secondary-icon-on-color: rgba(255, 255, 255, .9);
+  --secondary-icon-on-media: rgba(255, 255, 255, .8);
+  --warning: #AF8F00;
+  --always-white: #FFFFFF;
 }
 
 @keyframes iu-glimmer-pulse {
