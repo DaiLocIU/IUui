@@ -35,6 +35,7 @@ import TruncationTooltip from './components/TruncationTooltip.vue'
 import CometDensityModeStateProvider from './components/CometDensityModeStateProvider.vue'
 import FDSTextContextNew from './components/FDSTextContextNew.vue'
 import FDSBaseTextImpl from './components/FDSBaseTextImpl.vue'
+import FDSTextWithIcon from './components/FDSTextWithIcon.vue'
 import BaseListCell from './components/BaseListCell.vue'
 import FDSTextPairing from './components/FDSTextPairing.vue'
 import FDSHeadlineWithAddOn from './components/FDSHeadlineWithAddOn.vue'
@@ -96,7 +97,7 @@ const CometDensityProvider = CometDensityModeStateProvider
 const ImagePrimitive = BaseImage
 const IUListCell = BaseListCell
 
-export { BaseImage, CometImage, BaseBadge, BaseStyledBadge, FDSBadge, BaseButton, BaseGlimmer, BaseLoadingStateElement, BaseLink, FDSGlimmer, FDSListCellGlimmer, ScreenReaderText, FDSPressable, FDSListCellPressable, CometBookmarkListItem, CometBookmarkListItemWrapper, CometClassicHomeRailSeparator, CometHomeLeftRailBookmarkRefetchListCell, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing, PressableText, BaseSVGIcon, CometSVGIcon, FDSIcon, createDOMFocusQueryScope, focusElement, focusFirst, focusManager, focusNext, focusNextContained, focusPrevious, focusPreviousContained, getAllNodesFromOneOrManyQueries, getFDSBadgeColorStyle, getFirstNodeFromOneOrManyQueries, getTabbableNodes, isFocusingWithoutUserIntent, provideBaseIsDecorativeContext, useBaseIsDecorativeContext, useCometIconColors, useGlimmerPausedState, usePartialViewImpression, wasElementAutoFocused }
+export { BaseImage, CometImage, BaseBadge, BaseStyledBadge, FDSBadge, BaseButton, BaseGlimmer, BaseLoadingStateElement, BaseLink, FDSGlimmer, FDSListCellGlimmer, ScreenReaderText, FDSPressable, FDSListCellPressable, CometBookmarkListItem, CometBookmarkListItemWrapper, CometClassicHomeRailSeparator, CometHomeLeftRailBookmarkRefetchListCell, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, FDSTextWithIcon, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSTextPairing, PDSTextPairing, PressableText, BaseSVGIcon, CometSVGIcon, FDSIcon, createDOMFocusQueryScope, focusElement, focusFirst, focusManager, focusNext, focusNextContained, focusPrevious, focusPreviousContained, getAllNodesFromOneOrManyQueries, getFDSBadgeColorStyle, getFirstNodeFromOneOrManyQueries, getTabbableNodes, isFocusingWithoutUserIntent, provideBaseIsDecorativeContext, useBaseIsDecorativeContext, useCometIconColors, useGlimmerPausedState, usePartialViewImpression, wasElementAutoFocused }
 
 export default {
   install: (app: any) => {
@@ -133,6 +134,7 @@ export default {
     app.component('IUCometDensityProvider', CometDensityProvider)
     app.component('IUFDSTextContextNew', FDSTextContextNew)
     app.component('IUFDSBaseTextImpl', FDSBaseTextImpl)
+    app.component('IUFDSTextWithIcon', FDSTextWithIcon)
     app.component('IUBaseListCell', BaseListCell)
     app.component('IUListCell', IUListCell)
     app.component('IUFDSHeadlineWithAddOn', FDSHeadlineWithAddOn)
