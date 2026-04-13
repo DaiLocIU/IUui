@@ -214,13 +214,14 @@ export const ExactMetaBookmarkLinkProps: Story = {
             <CometDensityModeStateProvider :initial-dense="true">
               <FDSTextPairing
                 :level="4"
-                headline="Meta AI"
                 :headline-line-limit="2"
-                :meta="undefined"
-                :meta-color="undefined"
                 :meta-line-limit="1"
                 :reduce-emphasis="true"
-              />
+              >
+                <template #headline>
+                  Meta AI
+                </template>
+              </FDSTextPairing>
             </CometDensityModeStateProvider>
           </FDSListCellImplNew>
         </BaseLink>

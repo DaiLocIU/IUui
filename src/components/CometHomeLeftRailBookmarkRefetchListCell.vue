@@ -37,10 +37,13 @@
     <FDSTextPairing
       v-else
       :level="4"
-      :headline="resolvedHeadline"
       :headline-line-limit="1"
       :reduce-emphasis="true"
-    />
+    >
+      <template #headline>
+        {{ resolvedHeadline }}
+      </template>
+    </FDSTextPairing>
   </FDSListCellPressable>
 </template>
 

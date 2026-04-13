@@ -41,7 +41,7 @@ const exploreItems = [
   buildBookmark('644715445650924-10', 'Offers'),
 ]
 
-const meta = {
+const meta: Meta = {
   title: 'Comet/CometHomeLeftRailWithBlueRankingRefetchSection',
   component: CometHomeLeftRailWithBlueRankingRefetchSection,
   tags: ['autodocs'],
@@ -67,7 +67,7 @@ const meta = {
     onLoadMore: { action: 'loadMore' },
     setIsRefetching: { action: 'setIsRefetching' },
   },
-} satisfies Meta<typeof CometHomeLeftRailWithBlueRankingRefetchSection>
+}
 
 export default meta
 

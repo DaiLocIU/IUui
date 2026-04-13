@@ -15,7 +15,7 @@
 
     <div
       v-if="shouldRenderHeader"
-      class="w-full"
+      class="w-full pb-2"
     >
       <CometBookmarksHeader
         :can-edit="isEditableSection"

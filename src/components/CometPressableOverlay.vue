@@ -149,22 +149,25 @@ watchEffect(() => {
 })
 
 const overlayStyle = computed<CSSProperties | undefined>(() => {
-  let bottom = 0
-  let left = 0
-  let right = 0
-  let top = 0
+  if (lastVisualState.value == null) {
+    return undefined
+  }
+  let bottom: string = '0px'
+  let left: string = '0px'
+  let right: string = '0px'
+  let top: string = '0px'
 
   if (props.offset != null) {
     if (typeof props.offset === 'number') {
-      bottom = -props.offset
-      left = -props.offset
-      right = -props.offset
-      top = -props.offset
+      bottom = `${-props.offset}px`
+      left = `${-props.offset}px`
+      right = `${-props.offset}px`
+      top = `${-props.offset}px`
     } else {
-      bottom = -props.offset.bottom
-      left = -props.offset.left
-      right = -props.offset.right
-      top = -props.offset.top
+      bottom = `${-props.offset.bottom}px`
+      left = `${-props.offset.left}px`
+      right = `${-props.offset.right}px`
+      top = `${-props.offset.top}px`
     }
   }
 

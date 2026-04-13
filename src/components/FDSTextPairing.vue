@@ -5,7 +5,7 @@
   >
     <template v-if="metaLocation === 'above'">
       <div
-        v-if="meta != null || $slots.meta != null"
+        v-if="$slots.meta"
         class="fds-text-pairing__item"
         :class="itemSpacingClass"
       >
@@ -20,20 +20,19 @@
           :truncation-tooltip="metaTruncationTooltip"
           :type="hierarchyStyle.metaType"
         >
-          <slot name="meta">{{ meta }}</slot>
+          <slot name="meta" />
         </FDSBaseTextImpl>
       </div>
     </template>
 
     <div
-      v-if="headline != null"
+      v-if="$slots.headline"
       class="fds-text-pairing__item"
       :class="itemSpacingClass"
     >
       <FDSHeadlineWithAddOn
-        v-if="headlineAddOn != null"
+        v-if="$slots['headline-add-on']"
         ref="headlineTextRef"
-        :add-on="headlineAddOn"
         :color="headlineColor"
         :id="headlineId"
         :is-primary-heading="isPrimaryHeading"
@@ -42,7 +41,10 @@
         :truncation-tooltip="headlineTruncationTooltip"
         :type="hierarchyStyle.headlineType"
       >
-        {{ headline }}
+        <template #add-on>
+          <slot name="headline-add-on" />
+        </template>
+        <slot name="headline" />
       </FDSHeadlineWithAddOn>
 
       <FDSBaseTextImpl
@@ -58,13 +60,13 @@
         :truncation-tooltip="headlineTruncationTooltip"
         :type="hierarchyStyle.headlineType"
       >
-        {{ headline }}
+        <slot name="headline" />
       </FDSBaseTextImpl>
     </div>
 
     <template v-if="metaLocation === 'in-between'">
       <div
-        v-if="meta != null || $slots.meta != null"
+        v-if="$slots.meta"
         class="fds-text-pairing__item"
         :class="itemSpacingClass"
       >
@@ -79,13 +81,13 @@
           :truncation-tooltip="metaTruncationTooltip"
           :type="hierarchyStyle.metaType"
         >
-          <slot name="meta">{{ meta }}</slot>
+          <slot name="meta" />
         </FDSBaseTextImpl>
       </div>
     </template>
 
     <div
-      v-if="body != null"
+      v-if="$slots.body"
       class="fds-text-pairing__item"
       :class="itemSpacingClass"
     >
@@ -100,13 +102,13 @@
         :truncation-tooltip="bodyTruncationTooltip"
         :type="hierarchyStyle.bodyType"
       >
-        {{ body }}
+        <slot name="body" />
       </FDSBaseTextImpl>
     </div>
 
     <template v-if="metaLocation === 'below'">
       <div
-        v-if="meta != null || $slots.meta != null"
+        v-if="$slots.meta"
         class="fds-text-pairing__item"
         :class="itemSpacingClass"
       >
@@ -121,7 +123,7 @@
           :truncation-tooltip="metaTruncationTooltip"
           :type="hierarchyStyle.metaType"
         >
-          <slot name="meta">{{ meta }}</slot>
+          <slot name="meta" />
         </FDSBaseTextImpl>
       </div>
     </template>
@@ -143,15 +145,12 @@ import {
 type MetaLocation = 'above' | 'below' | 'in-between'
 
 export interface Props {
-  body?: string | number | null
   bodyColor?: FDSTextColor
   bodyId?: string
   bodyLineLimit?: number
   bodyRef?: unknown
   bodyTruncationTooltip?: unknown
   dir?: 'ltr' | 'rtl' | 'auto'
-  headline?: string | number | null
-  headlineAddOn?: unknown
   headlineColor?: FDSTextColor
   headlineId?: string
   headlineLineLimit?: number
@@ -160,7 +159,6 @@ export interface Props {
   isPrimaryHeading?: boolean
   isSemanticHeading?: boolean
   level: FDSTextPairingLevel
-  meta?: string | number | null
   metaColor?: FDSTextColor
   metaId?: string
   metaLineLimit?: number
@@ -174,15 +172,12 @@ export interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  body: null,
   bodyColor: 'primary',
   bodyId: undefined,
   bodyLineLimit: undefined,
   bodyRef: undefined,
   bodyTruncationTooltip: undefined,
   dir: 'auto',
-  headline: null,
-  headlineAddOn: undefined,
   headlineColor: 'primary',
   headlineId: undefined,
   headlineLineLimit: undefined,
@@ -190,7 +185,6 @@ const props = withDefaults(defineProps<Props>(), {
   headlineTruncationTooltip: undefined,
   isPrimaryHeading: false,
   isSemanticHeading: false,
-  meta: null,
   metaColor: 'secondary',
   metaId: undefined,
   metaLineLimit: undefined,

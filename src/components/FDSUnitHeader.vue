@@ -15,22 +15,58 @@
         >
           <IUColumnItem>
             <FDSTextPairing
-              :body="props.body"
               :body-color="resolvedBodyColor"
               :body-line-limit="resolvedBodyLineLimit"
-              :headline="props.headline"
-              :headline-add-on="headlineAddOn"
               :headline-color="resolvedHeadlineColor"
               :headline-id="props.headlineId"
               :headline-line-limit="2"
               :is-semantic-heading="resolvedSemanticHeading"
               :level="props.level"
-              :meta="props.meta"
               :meta-color="resolvedMetaColor"
               :meta-line-limit="1"
               :meta-location="resolvedMetaLocation"
               :meta-test-i-d="props.metaTestID"
-            />
+            >
+              <template
+                v-if="props.headline != null"
+                #headline
+              >
+                {{ props.headline }}
+              </template>
+
+              <template
+                v-if="hasActionProp"
+                #headline-add-on
+              >
+                <component
+                  :is="resolvedActionComponent"
+                  v-bind="resolvedActionProps"
+                />
+              </template>
+
+              <template
+                v-else-if="hasActionSlot"
+                #headline-add-on
+              >
+                <div :class="actionShellClass">
+                  <slot name="action" />
+                </div>
+              </template>
+
+              <template
+                v-if="props.meta != null"
+                #meta
+              >
+                {{ props.meta }}
+              </template>
+
+              <template
+                v-if="props.body != null"
+                #body
+              >
+                {{ props.body }}
+              </template>
+            </FDSTextPairing>
           </IUColumnItem>
         </IUColumn>
       </IUColumnItem>
@@ -43,29 +79,65 @@
     >
       <IUColumnItem>
         <FDSTextPairing
-          :body="props.body"
           :body-color="resolvedBodyColor"
           :body-line-limit="resolvedBodyLineLimit"
-          :headline="props.headline"
-          :headline-add-on="headlineAddOn"
           :headline-color="resolvedHeadlineColor"
           :headline-id="props.headlineId"
           :headline-line-limit="2"
           :is-semantic-heading="resolvedSemanticHeading"
           :level="props.level"
-          :meta="props.meta"
           :meta-color="resolvedMetaColor"
           :meta-line-limit="1"
           :meta-location="resolvedMetaLocation"
           :meta-test-i-d="props.metaTestID"
-        />
+        >
+          <template
+            v-if="props.headline != null"
+            #headline
+          >
+            {{ props.headline }}
+          </template>
+
+          <template
+            v-if="hasActionProp"
+            #headline-add-on
+          >
+            <component
+              :is="resolvedActionComponent"
+              v-bind="resolvedActionProps"
+            />
+          </template>
+
+          <template
+            v-else-if="hasActionSlot"
+            #headline-add-on
+          >
+            <div :class="actionShellClass">
+              <slot name="action" />
+            </div>
+          </template>
+
+          <template
+            v-if="props.meta != null"
+            #meta
+          >
+            {{ props.meta }}
+          </template>
+
+          <template
+            v-if="props.body != null"
+            #body
+          >
+            {{ props.body }}
+          </template>
+        </FDSTextPairing>
       </IUColumnItem>
     </IUColumn>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, h, useSlots, type Component, type PropType } from 'vue'
+import { computed, useSlots, type Component, type PropType } from 'vue'
 
 import FDSTextPairing from './FDSTextPairing.vue'
 import IUColumn from './IUColumn.vue'
@@ -78,8 +150,16 @@ defineOptions({
 })
 
 type UnitHeaderMetaLocation = 'above' | 'below' | 'in-between'
+type UnitHeaderAction = {
+  component: Component | string
+  props?: Record<string, unknown>
+}
 
 const props = defineProps({
+  action: {
+    type: Object as PropType<UnitHeaderAction | undefined>,
+    default: undefined,
+  },
   body: {
     type: [String, Number] as PropType<string | number | null>,
     default: null,
@@ -184,35 +264,17 @@ const rootXStyle = computed(() => [
   paddingTopClassMap[resolvedPaddingTop.value as 0 | 8 | 12 | 16 | 20],
 ])
 
+const hasActionProp = computed(() => props.action != null)
+const hasActionSlot = computed(() => slots.action != null)
+const resolvedActionComponent = computed<Component | string | null>(() => props.action?.component ?? null)
+const resolvedActionProps = computed<Record<string, unknown>>(() => props.action?.props ?? {})
+
 const actionShellClass = computed(() => [
   'fds-unit-header__action-shell inline-block relative align-middle m-0 p-0 border-0',
   props.showActionOnHover && 'fds-unit-header__action-shell--hover-reveal',
   props.actionHidden && 'fds-unit-header__action-shell--hidden',
 ])
 
-const HeadlineActionAddOn = defineComponent({
-  name: 'FDSUnitHeaderHeadlineActionAddOn',
-  setup() {
-    return () => {
-      const content = slots.action?.()
-      if (content == null || content.length === 0) {
-        return null
-      }
-
-      return h(
-        'div',
-        {
-          class: actionShellClass.value,
-        },
-        content,
-      )
-    }
-  },
-})
-
-const headlineAddOn = computed<Component | undefined>(() =>
-  slots.action == null ? undefined : HeadlineActionAddOn,
-)
 </script>
 
 <style scoped>

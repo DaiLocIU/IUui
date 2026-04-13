@@ -20,18 +20,22 @@
 
       <FDSTextPairing
         :level="4"
-        :headline="name"
         :headline-line-limit="2"
-        :meta="meta"
         :meta-color="metaColor"
         :meta-line-limit="metaLineLimit"
         :reduce-emphasis="true"
       >
+        <template #headline>
+          {{ name }}
+        </template>
+
         <template
-          v-if="$slots.meta != null"
+          v-if="$slots.meta != null || meta != null"
           #meta
         >
-          <slot name="meta" />
+          <slot name="meta">
+            {{ meta }}
+          </slot>
         </template>
       </FDSTextPairing>
 

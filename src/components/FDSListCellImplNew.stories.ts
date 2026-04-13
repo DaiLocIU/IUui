@@ -72,11 +72,14 @@ export const Default: Story = {
           <CometDensityModeStateProvider :initial-dense="true">
             <FDSTextPairing
               :level="4"
-              headline="Meta AI"
               :headline-line-limit="2"
               :meta-line-limit="1"
               :reduce-emphasis="true"
-            />
+            >
+              <template #headline>
+                Meta AI
+              </template>
+            </FDSTextPairing>
           </CometDensityModeStateProvider>
 
           <template #addOnEnd>
@@ -126,12 +129,18 @@ export const DynamicSpacing: Story = {
           <CometDensityModeStateProvider :initial-dense="true">
             <FDSTextPairing
               :level="4"
-              headline="Meta AI"
-              meta="Assistant updates ready"
               :headline-line-limit="2"
               :meta-line-limit="1"
               :reduce-emphasis="true"
-            />
+            >
+              <template #headline>
+                Meta AI
+              </template>
+
+              <template #meta>
+                Assistant updates ready
+              </template>
+            </FDSTextPairing>
           </CometDensityModeStateProvider>
 
           <template #addOnBottom>
@@ -179,12 +188,18 @@ export const WithBottomDivider: Story = {
           <CometDensityModeStateProvider :initial-dense="true">
             <FDSTextPairing
               :level="4"
-              headline="Meta AI"
-              meta="Divider enabled"
               :headline-line-limit="2"
               :meta-line-limit="1"
               :reduce-emphasis="true"
-            />
+            >
+              <template #headline>
+                Meta AI
+              </template>
+
+              <template #meta>
+                Divider enabled
+              </template>
+            </FDSTextPairing>
           </CometDensityModeStateProvider>
         </FDSListCellImplNew>
       </div>
@@ -225,13 +240,14 @@ export const MetaAIExactProps: Story = {
           <CometDensityModeStateProvider :initial-dense="true">
             <FDSTextPairing
               :level="4"
-              headline="Meta AI"
               :headline-line-limit="2"
-              :meta="undefined"
-              :meta-color="undefined"
               :meta-line-limit="1"
               :reduce-emphasis="true"
-            />
+            >
+              <template #headline>
+                Meta AI
+              </template>
+            </FDSTextPairing>
           </CometDensityModeStateProvider>
         </FDSListCellImplNew>
       </div>
