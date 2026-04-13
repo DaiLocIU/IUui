@@ -58,6 +58,7 @@
   --secondary-icon-on-media: rgba(255, 255, 255, .8);
   --warning: #AF8F00;
   --always-white: #FFFFFF;
+  --divider: #D0D3D7;
 }
 
 @keyframes iu-glimmer-pulse {

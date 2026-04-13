@@ -4,6 +4,7 @@
     :aria-label="resolvedAriaLabel"
     :on-press="handlePress"
     :addOnStartMarginTop="0"
+    :padding-horizontal="8"
   >
     <template #addOnStart>
       <slot name="addOnStart">

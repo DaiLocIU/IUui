@@ -10,6 +10,7 @@
     :name="resolvedName"
     :on-press="resolvedOnPress"
     :selected="resolvedSelected"
+    :total-shortcut-count="totalShortcutCount"
   >
     <template #addOnStart>
       <BaseImage
@@ -26,6 +27,13 @@
       #addOnEnd
     >
       <slot name="addOnEnd" />
+    </template>
+
+    <template
+      v-if="$slots.meta != null"
+      #meta
+    >
+      <slot name="meta" />
     </template>
   </CometBookmarkListItem>
 </template>
@@ -69,6 +77,7 @@ interface Props {
   onExpand?: () => void
   onPress?: (event: MouseEvent | KeyboardEvent) => void
   selected?: boolean
+  totalShortcutCount?: number
   useNucleusIcon?: boolean
 }
 
@@ -82,6 +91,7 @@ const props = withDefaults(defineProps<Props>(), {
   onExpand: undefined,
   onPress: undefined,
   selected: undefined,
+  totalShortcutCount: undefined,
   useNucleusIcon: undefined,
 })
 

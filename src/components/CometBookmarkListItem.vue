@@ -26,7 +26,14 @@
         :meta-color="metaColor"
         :meta-line-limit="metaLineLimit"
         :reduce-emphasis="true"
-      />
+      >
+        <template
+          v-if="$slots.meta != null"
+          #meta
+        >
+          <slot name="meta" />
+        </template>
+      </FDSTextPairing>
 
       <template
         v-if="$slots.addOnEnd != null"
@@ -61,6 +68,7 @@ interface Props {
   onHoverOut?: (event: HoverEvent) => void
   onPress?: (event: MouseEvent | KeyboardEvent) => void
   selected?: boolean
+  totalShortcutCount?: number
 }
 
 withDefaults(defineProps<Props>(), {
@@ -73,6 +81,7 @@ withDefaults(defineProps<Props>(), {
   onHoverOut: undefined,
   onPress: undefined,
   selected: false,
+  totalShortcutCount: undefined,
 })
 
 const attrs = useAttrs()

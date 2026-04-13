@@ -5,7 +5,7 @@
   >
     <template v-if="metaLocation === 'above'">
       <div
-        v-if="meta != null"
+        v-if="meta != null || $slots.meta != null"
         class="fds-text-pairing__item"
         :class="itemSpacingClass"
       >
@@ -20,7 +20,7 @@
           :truncation-tooltip="metaTruncationTooltip"
           :type="hierarchyStyle.metaType"
         >
-          {{ meta }}
+          <slot name="meta">{{ meta }}</slot>
         </FDSBaseTextImpl>
       </div>
     </template>
@@ -64,7 +64,7 @@
 
     <template v-if="metaLocation === 'in-between'">
       <div
-        v-if="meta != null"
+        v-if="meta != null || $slots.meta != null"
         class="fds-text-pairing__item"
         :class="itemSpacingClass"
       >
@@ -79,7 +79,7 @@
           :truncation-tooltip="metaTruncationTooltip"
           :type="hierarchyStyle.metaType"
         >
-          {{ meta }}
+          <slot name="meta">{{ meta }}</slot>
         </FDSBaseTextImpl>
       </div>
     </template>
@@ -106,7 +106,7 @@
 
     <template v-if="metaLocation === 'below'">
       <div
-        v-if="meta != null"
+        v-if="meta != null || $slots.meta != null"
         class="fds-text-pairing__item"
         :class="itemSpacingClass"
       >
@@ -121,7 +121,7 @@
           :truncation-tooltip="metaTruncationTooltip"
           :type="hierarchyStyle.metaType"
         >
-          {{ meta }}
+          <slot name="meta">{{ meta }}</slot>
         </FDSBaseTextImpl>
       </div>
     </template>
