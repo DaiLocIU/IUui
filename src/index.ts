@@ -11,6 +11,8 @@ import BaseBadge from './components/BaseBadge.vue'
 import BaseStyledBadge from './components/BaseStyledBadge.vue'
 import FDSBadge from './components/FDSBadge.vue'
 import FDSLoadingAnimation from './components/FDSLoadingAnimation.vue'
+import FDSProfilePhotoActivityBadge from './components/FDSProfilePhotoActivityBadge.vue'
+import FDSProfilePhotoAvailabilityBadge from './components/FDSProfilePhotoAvailabilityBadge.vue'
 import BaseButton from './components/BaseButton'
 import BaseGlimmer from './components/BaseGlimmer.vue'
 import BaseLoadingStateElement from './components/BaseLoadingStateElement.vue'
@@ -105,7 +107,7 @@ const CometDensityProvider = CometDensityModeStateProvider
 const ImagePrimitive = BaseImage
 const IUListCell = BaseListCell
 
-export { BaseImage, CometImage, BaseBadge, BaseStyledBadge, FDSBadge, FDSLoadingAnimation, BaseButton, BaseGlimmer, BaseLoadingStateElement, BaseLink, FDSGlimmer, FDSListCellGlimmer, ScreenReaderText, FDSPressable, FDSListCellPressable, CometPressableChildrenWithOverlay_DEPRECATED, CometBookmarkListItem, CometBookmarkListItemWrapper, CometBookmarksHeader, CometFolderBookmarkListItem, CometClassicHomeRailSeparator, CometHomeLeftRailBookmarkRefetchListCell, CometHomeLeftRailWithBlueRankingRefetchSection, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, FDSTextWithBadge, FDSTextWithIcon, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSUnitHeader, FDSUnitHeaderTextAction, FDSTextPairing, PressableText, BaseSVGIcon, CometSVGIcon, FDSIcon, createDOMFocusQueryScope, focusElement, focusFirst, focusManager, focusNext, focusNextContained, focusPrevious, focusPreviousContained, getAllNodesFromOneOrManyQueries, getFDSBadgeColorStyle, getFirstNodeFromOneOrManyQueries, getTabbableNodes, isFocusingWithoutUserIntent, provideBaseIsDecorativeContext, useBaseIsDecorativeContext, useCometIconColors, useGlimmerPausedState, usePartialViewImpression, wasElementAutoFocused }
+export { BaseImage, CometImage, BaseBadge, BaseStyledBadge, FDSBadge, FDSLoadingAnimation, FDSProfilePhotoActivityBadge, FDSProfilePhotoAvailabilityBadge, BaseButton, BaseGlimmer, BaseLoadingStateElement, BaseLink, FDSGlimmer, FDSListCellGlimmer, ScreenReaderText, FDSPressable, FDSListCellPressable, CometPressableChildrenWithOverlay_DEPRECATED, CometBookmarkListItem, CometBookmarkListItemWrapper, CometBookmarksHeader, CometFolderBookmarkListItem, CometClassicHomeRailSeparator, CometHomeLeftRailBookmarkRefetchListCell, CometHomeLeftRailWithBlueRankingRefetchSection, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, FDSTextWithBadge, FDSTextWithIcon, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSUnitHeader, FDSUnitHeaderTextAction, FDSTextPairing, PressableText, BaseSVGIcon, CometSVGIcon, FDSIcon, createDOMFocusQueryScope, focusElement, focusFirst, focusManager, focusNext, focusNextContained, focusPrevious, focusPreviousContained, getAllNodesFromOneOrManyQueries, getFDSBadgeColorStyle, getFirstNodeFromOneOrManyQueries, getTabbableNodes, isFocusingWithoutUserIntent, provideBaseIsDecorativeContext, useBaseIsDecorativeContext, useCometIconColors, useGlimmerPausedState, usePartialViewImpression, wasElementAutoFocused }
 
 export default {
   install: (app: any) => {
@@ -115,6 +117,8 @@ export default {
     app.component('IUBaseStyledBadge', BaseStyledBadge)
     app.component('IUFDSBadge', FDSBadge)
     app.component('IUFDSLoadingAnimation', FDSLoadingAnimation)
+    app.component('IUFDSProfilePhotoActivityBadge', FDSProfilePhotoActivityBadge)
+    app.component('IUFDSProfilePhotoAvailabilityBadge', FDSProfilePhotoAvailabilityBadge)
     app.component('IUBaseButton', BaseButton)
     app.component('IUBaseGlimmer', BaseGlimmer)
     app.component('IUBaseLoadingStateElement', BaseLoadingStateElement)
