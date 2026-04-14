@@ -10,6 +10,7 @@ import CometImage from './components/CometImage.vue'
 import BaseBadge from './components/BaseBadge.vue'
 import BaseStyledBadge from './components/BaseStyledBadge.vue'
 import FDSBadge from './components/FDSBadge.vue'
+import FDSLoadingAnimation from './components/FDSLoadingAnimation.vue'
 import BaseButton from './components/BaseButton'
 import BaseGlimmer from './components/BaseGlimmer.vue'
 import BaseLoadingStateElement from './components/BaseLoadingStateElement.vue'
@@ -19,6 +20,7 @@ import FDSListCellGlimmer from './components/FDSListCellGlimmer.vue'
 import ScreenReaderText from './components/ScreenReaderText.vue'
 import FDSPressable from './components/FDSPressable'
 import FDSListCellPressable from './components/FDSListCellPressable.vue'
+import CometPressableChildrenWithOverlay_DEPRECATED from './components/CometPressableChildrenWithOverlay_DEPRECATED.vue'
 import CometBookmarkListItem from './components/CometBookmarkListItem.vue'
 import CometBookmarkListItemWrapper from './components/CometBookmarkListItemWrapper.vue'
 import CometBookmarksHeader from './components/CometBookmarksHeader.vue'
@@ -103,7 +105,7 @@ const CometDensityProvider = CometDensityModeStateProvider
 const ImagePrimitive = BaseImage
 const IUListCell = BaseListCell
 
-export { BaseImage, CometImage, BaseBadge, BaseStyledBadge, FDSBadge, BaseButton, BaseGlimmer, BaseLoadingStateElement, BaseLink, FDSGlimmer, FDSListCellGlimmer, ScreenReaderText, FDSPressable, FDSListCellPressable, CometBookmarkListItem, CometBookmarkListItemWrapper, CometBookmarksHeader, CometFolderBookmarkListItem, CometClassicHomeRailSeparator, CometHomeLeftRailBookmarkRefetchListCell, CometHomeLeftRailWithBlueRankingRefetchSection, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, FDSTextWithBadge, FDSTextWithIcon, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSUnitHeader, FDSUnitHeaderTextAction, FDSTextPairing, PressableText, BaseSVGIcon, CometSVGIcon, FDSIcon, createDOMFocusQueryScope, focusElement, focusFirst, focusManager, focusNext, focusNextContained, focusPrevious, focusPreviousContained, getAllNodesFromOneOrManyQueries, getFDSBadgeColorStyle, getFirstNodeFromOneOrManyQueries, getTabbableNodes, isFocusingWithoutUserIntent, provideBaseIsDecorativeContext, useBaseIsDecorativeContext, useCometIconColors, useGlimmerPausedState, usePartialViewImpression, wasElementAutoFocused }
+export { BaseImage, CometImage, BaseBadge, BaseStyledBadge, FDSBadge, FDSLoadingAnimation, BaseButton, BaseGlimmer, BaseLoadingStateElement, BaseLink, FDSGlimmer, FDSListCellGlimmer, ScreenReaderText, FDSPressable, FDSListCellPressable, CometPressableChildrenWithOverlay_DEPRECATED, CometBookmarkListItem, CometBookmarkListItemWrapper, CometBookmarksHeader, CometFolderBookmarkListItem, CometClassicHomeRailSeparator, CometHomeLeftRailBookmarkRefetchListCell, CometHomeLeftRailWithBlueRankingRefetchSection, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, FDSTextWithBadge, FDSTextWithIcon, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSUnitHeader, FDSUnitHeaderTextAction, FDSTextPairing, PressableText, BaseSVGIcon, CometSVGIcon, FDSIcon, createDOMFocusQueryScope, focusElement, focusFirst, focusManager, focusNext, focusNextContained, focusPrevious, focusPreviousContained, getAllNodesFromOneOrManyQueries, getFDSBadgeColorStyle, getFirstNodeFromOneOrManyQueries, getTabbableNodes, isFocusingWithoutUserIntent, provideBaseIsDecorativeContext, useBaseIsDecorativeContext, useCometIconColors, useGlimmerPausedState, usePartialViewImpression, wasElementAutoFocused }
 
 export default {
   install: (app: any) => {
@@ -112,6 +114,7 @@ export default {
     app.component('IUBaseBadge', BaseBadge)
     app.component('IUBaseStyledBadge', BaseStyledBadge)
     app.component('IUFDSBadge', FDSBadge)
+    app.component('IUFDSLoadingAnimation', FDSLoadingAnimation)
     app.component('IUBaseButton', BaseButton)
     app.component('IUBaseGlimmer', BaseGlimmer)
     app.component('IUBaseLoadingStateElement', BaseLoadingStateElement)
@@ -121,6 +124,7 @@ export default {
     app.component('IUScreenReaderText', ScreenReaderText)
     app.component('IUFDSPressable', FDSPressable)
     app.component('IUFDSListCellPressable', FDSListCellPressable)
+    app.component('IUCometPressableChildrenWithOverlay_DEPRECATED', CometPressableChildrenWithOverlay_DEPRECATED)
     app.component('IUCometBookmarkListItem', CometBookmarkListItem)
     app.component('IUCometBookmarkListItemWrapper', CometBookmarkListItemWrapper)
     app.component('IUCometBookmarksHeader', CometBookmarksHeader)
