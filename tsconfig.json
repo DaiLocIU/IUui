@@ -16,6 +16,15 @@
     "declaration": true,
     "types": ["vite/client", "node", "web-bluetooth"]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "vite.config.ts"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "**/*.test.ts",
+    "vitest.shims.d.ts",
+    "vite.config.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

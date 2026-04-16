@@ -5,17 +5,19 @@ import dts from "vite-plugin-dts";
 import { resolve } from "path";
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
-import { playwright } from '@vitest/browser-playwright';
 import tailwindcss from "@tailwindcss/vite";
 const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
-// More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   plugins: [vue(), tailwindcss(), dts({
     insertTypesEntry: true,
     include: ["src/**/*.ts", "src/**/*.vue"]
   })],
+  test: {
+    include: ["**/*.test.ts"],
+    exclude: ["node_modules/**", "dist/**", "storybook-static/**"],
+    environment: "node"
+  },
   build: {
     lib: {
       entry: resolve(__dirname, "src/index.ts"),

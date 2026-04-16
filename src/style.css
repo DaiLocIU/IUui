@@ -60,7 +60,9 @@
   --warning: #AF8F00;
   --always-white: #FFFFFF;
   --divider: #D0D3D7;
-  
+  --secondary-button-background-floating: #FFF;
+  --last-active-state-background: #F2FCF0;
+  --web-wash: #F2F4F7;
 }
 
 @keyframes iu-glimmer-pulse {

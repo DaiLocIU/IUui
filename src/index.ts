@@ -12,6 +12,7 @@ import BaseStyledBadge from './components/BaseStyledBadge.vue'
 import FDSBadge from './components/FDSBadge.vue'
 import FDSLoadingAnimation from './components/FDSLoadingAnimation.vue'
 import FDSProfilePhotoActivityBadge from './components/FDSProfilePhotoActivityBadge.vue'
+import FDSProfilePhotoActivePill from './components/FDSProfilePhotoActivePill.vue'
 import FDSProfilePhotoAvailabilityBadge from './components/FDSProfilePhotoAvailabilityBadge.vue'
 import BaseButton from './components/BaseButton'
 import BaseGlimmer from './components/BaseGlimmer.vue'
@@ -49,7 +50,13 @@ import FDSTextPairing from './components/FDSTextPairing.vue'
 import FDSHeadlineWithAddOn from './components/FDSHeadlineWithAddOn.vue'
 import FDSUnitHeader from './components/FDSUnitHeader.vue'
 import FDSUnitHeaderTextAction from './components/FDSUnitHeaderTextAction.vue'
+import FocusWithinHandler from './components/FocusWithinHandler'
 import PressableText from './components/WebPressable/PressableText.vue'
+import useAnchorVisibilityObserver, {
+  MODERATE_INTERSECTION_RATIO,
+} from './composables/useAnchorVisibilityObserver'
+import useBaseAnchorElement from './composables/useBaseAnchorElement'
+import useDelayedState from './composables/useDelayedState'
 import useGlimmerPausedState from './composables/useGlimmerPausedState'
 import usePartialViewImpression from './composables/usePartialViewImpression'
 import {
@@ -57,6 +64,15 @@ import {
   useBaseIsDecorativeContext,
 } from './composables/useBaseIsDecorativeContext'
 import { useCometIconColors } from './composables/useCometIconColors'
+import useStable from './composables/useStable'
+import useServerTime, {
+  DEFAULT_SERVER_TIME_REFRESH_MS,
+  getServerTimeDate,
+  resetServerTimeProvider,
+  setServerTimeProvider,
+  subscribeToServerTimeUpdates,
+} from './composables/useServerTime'
+import useFocusWithin from './components/WebPressable/composables/useFocusWithin'
 import focusManager, {
   focusElement,
   focusFirst,
@@ -69,6 +85,21 @@ import focusManager, {
   isFocusingWithoutUserIntent,
   wasElementAutoFocused,
 } from './utils/focusManager'
+import {
+  anchorPositionAreaCompatToCssValue,
+  contextualLayerToAnchorPositionAreaCompat,
+  passesAnchorPositionExperiment,
+  supportsCSSAnchorPositioning,
+} from './utils/baseAnchorPositioningUtils'
+import {
+  getRelativeTimestamp,
+  getRelativeTimestampInFuture,
+} from './utils/baseRelativeTimestamp'
+import {
+  getAbsoluteTimestamp,
+  getAbsoluteTimestampFbt,
+  getTimestamp,
+} from './utils/timestampUtils'
 import getFDSBadgeColorStyle from './utils/getFDSBadgeColorStyle'
 import getTabbableNodes, {
   createDOMFocusQueryScope,
@@ -93,6 +124,35 @@ export type {
   FocusElementOptions,
 } from './utils/focusManager'
 export type {
+  RelativeTimestampDayMode,
+  RelativeTimestampFormat,
+  RelativeTimestampRounding,
+} from './utils/baseRelativeTimestamp'
+export type {
+  AnchorPositionAreaCompat,
+  AnchorPositionAreaToken,
+  ContextualLayerAlignment,
+  ContextualLayerPosition,
+} from './utils/baseAnchorPositioningUtils'
+export type { FocusWithinHandlerTestOnlyState } from './components/FocusWithinHandler'
+export type {
+  BaseAnchorStyle,
+  UseBaseAnchorElementReturn,
+} from './composables/useBaseAnchorElement'
+export type {
+  DelayedStateCallback,
+  SetDelayedState,
+  UseDelayedStateReturn,
+} from './composables/useDelayedState'
+export type {
+  UseFocusWithinOptions,
+  UseFocusWithinReturn,
+} from './components/WebPressable/composables/useFocusWithin'
+export type { UseAnchorVisibilityObserverReturn } from './composables/useAnchorVisibilityObserver'
+export type { StableFactory } from './composables/useStable'
+export type { ServerTimeProvider } from './composables/useServerTime'
+export type { TimestampFormatOptions } from './utils/timestampUtils'
+export type {
   PartialViewHiddenReason,
   PartialViewImpressionEndPayload,
   UsePartialViewImpressionOptions,
@@ -107,7 +167,7 @@ const CometDensityProvider = CometDensityModeStateProvider
 const ImagePrimitive = BaseImage
 const IUListCell = BaseListCell
 
-export { BaseImage, CometImage, BaseBadge, BaseStyledBadge, FDSBadge, FDSLoadingAnimation, FDSProfilePhotoActivityBadge, FDSProfilePhotoAvailabilityBadge, BaseButton, BaseGlimmer, BaseLoadingStateElement, BaseLink, FDSGlimmer, FDSListCellGlimmer, ScreenReaderText, FDSPressable, FDSListCellPressable, CometPressableChildrenWithOverlay_DEPRECATED, CometBookmarkListItem, CometBookmarkListItemWrapper, CometBookmarksHeader, CometFolderBookmarkListItem, CometClassicHomeRailSeparator, CometHomeLeftRailBookmarkRefetchListCell, CometHomeLeftRailWithBlueRankingRefetchSection, BaseLinkDefaultTargetProvider, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, FDSTextContextNew, FDSBaseTextImpl, FDSTextWithBadge, FDSTextWithIcon, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSUnitHeader, FDSUnitHeaderTextAction, FDSTextPairing, PressableText, BaseSVGIcon, CometSVGIcon, FDSIcon, createDOMFocusQueryScope, focusElement, focusFirst, focusManager, focusNext, focusNextContained, focusPrevious, focusPreviousContained, getAllNodesFromOneOrManyQueries, getFDSBadgeColorStyle, getFirstNodeFromOneOrManyQueries, getTabbableNodes, isFocusingWithoutUserIntent, provideBaseIsDecorativeContext, useBaseIsDecorativeContext, useCometIconColors, useGlimmerPausedState, usePartialViewImpression, wasElementAutoFocused }
+export { BaseImage, CometImage, BaseBadge, BaseStyledBadge, FDSBadge, FDSLoadingAnimation, FDSProfilePhotoActivityBadge, FDSProfilePhotoActivePill, FDSProfilePhotoAvailabilityBadge, BaseButton, BaseGlimmer, BaseLoadingStateElement, BaseLink, FDSGlimmer, FDSListCellGlimmer, ScreenReaderText, FDSPressable, FDSListCellPressable, CometPressableChildrenWithOverlay_DEPRECATED, CometBookmarkListItem, CometBookmarkListItemWrapper, CometBookmarksHeader, CometFolderBookmarkListItem, CometClassicHomeRailSeparator, CometHomeLeftRailBookmarkRefetchListCell, CometHomeLeftRailWithBlueRankingRefetchSection, BaseLinkDefaultTargetProvider, FocusWithinHandler, ImagePrimitive, IURow, IUColumn, IURowItem, IUColumnItem, CometScrollView, SidebarRail, SidebarRailSection, SidebarRailItem, SidebarRailFooter, TruncationTooltip, CometDensityModeStateProvider, CometDensityProvider, DEFAULT_SERVER_TIME_REFRESH_MS, FDSTextContextNew, FDSBaseTextImpl, FDSTextWithBadge, FDSTextWithIcon, BaseListCell, IUListCell, FDSHeadlineWithAddOn, FDSUnitHeader, FDSUnitHeaderTextAction, FDSTextPairing, MODERATE_INTERSECTION_RATIO, PressableText, BaseSVGIcon, CometSVGIcon, FDSIcon, anchorPositionAreaCompatToCssValue, contextualLayerToAnchorPositionAreaCompat, createDOMFocusQueryScope, focusElement, focusFirst, focusManager, getAbsoluteTimestamp, getAbsoluteTimestampFbt, getRelativeTimestamp, getRelativeTimestampInFuture, getServerTimeDate, getTimestamp, focusNext, focusNextContained, focusPrevious, focusPreviousContained, getAllNodesFromOneOrManyQueries, getFDSBadgeColorStyle, getFirstNodeFromOneOrManyQueries, getTabbableNodes, isFocusingWithoutUserIntent, passesAnchorPositionExperiment, provideBaseIsDecorativeContext, resetServerTimeProvider, setServerTimeProvider, subscribeToServerTimeUpdates, supportsCSSAnchorPositioning, useAnchorVisibilityObserver, useBaseAnchorElement, useBaseIsDecorativeContext, useCometIconColors, useDelayedState, useFocusWithin, useGlimmerPausedState, usePartialViewImpression, useServerTime, useStable, wasElementAutoFocused }
 
 export default {
   install: (app: any) => {
@@ -118,6 +178,7 @@ export default {
     app.component('IUFDSBadge', FDSBadge)
     app.component('IUFDSLoadingAnimation', FDSLoadingAnimation)
     app.component('IUFDSProfilePhotoActivityBadge', FDSProfilePhotoActivityBadge)
+    app.component('IUFDSProfilePhotoActivePill', FDSProfilePhotoActivePill)
     app.component('IUFDSProfilePhotoAvailabilityBadge', FDSProfilePhotoAvailabilityBadge)
     app.component('IUBaseButton', BaseButton)
     app.component('IUBaseGlimmer', BaseGlimmer)
@@ -137,6 +198,7 @@ export default {
     app.component('IUCometHomeLeftRailBookmarkRefetchListCell', CometHomeLeftRailBookmarkRefetchListCell)
     app.component('IUCometHomeLeftRailWithBlueRankingRefetchSection', CometHomeLeftRailWithBlueRankingRefetchSection)
     app.component('IUBaseLinkDefaultTargetProvider', BaseLinkDefaultTargetProvider)
+    app.component('IUFocusWithinHandler', FocusWithinHandler)
     app.component('IURow', IURow)
     app.component('IUColumn', IUColumn)
     app.component('IURowItem', IURowItem)
